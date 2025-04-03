@@ -19,60 +19,49 @@ class NavigationDropdown extends HTMLElement {
       <div class="section">
         <h3>Links</h3>
         <ul>
-          <li><a href="https://rlhfbook.com">Home</a></li>
-          <li><a href="https://github.com/natolambert/rlhf-book">GitHub Repository</a></li>
-          <li><a href="https://rlhfbook.com/book.pdf">PDF</a></li>
-          <li class="inactive">Order a copy (Soon)</li>
+          <li><a href="https://collinsquillian.github.io/cogllms/">Home</a></li>
+          <li><a href="https://github.com/collinsquillian/cogllms">GitHub Repository</a></li>
         </ul>
       </div>
 
       <div class="section">
         <h3>Introductions</h3>
         <ol start="1">
-          <li><a href="https://rlhfbook.com/c/01-introduction.html">Introduction</a></li>
-          <li><a href="https://rlhfbook.com/c/02-related-works.html">Seminal (Recent) Works</a></li>
-          <li><a href="https://rlhfbook.com/c/03-setup.html">Definitions</a></li>
+          <li><a href="https://collinsquillian.github.io/cogllms/c/01-introduction.html">Introduction</a></li>
+          <li><a href="https://rlhfbook.com/c/01-cognitive-science.html">Reasoning fast and slow</a></li>
         </ol>
       </div>
 
       <div class="section">
         <h3>Problem Setup & Context</h3>
         <ol start="4">
-          <li><a href="https://rlhfbook.com/c/04-optimization.html">Training Overview</a></li>
-          <li><a href="https://rlhfbook.com/c/05-preferences.html">What are preferences?</a></li>
-          <li><a href="https://rlhfbook.com/c/06-preference-data.html">Preference Data</a></li>
+          <li><a href="https://rlhfbook.com/c/04-program-synthesis.html">Program Synthesis</a></li>
+          <li><a href="https://rlhfbook.com/c/05-deep-learning.html">2014-2024 Deep Learning</a></li>
+          <li><a href="https://rlhfbook.com/c/06-transformers.html">Transformers 101</a></li>
         </ol>
       </div>
 
       <div class="section">
-        <h3>Optimization Tools</h3>
+        <h3>Training LLMs</h3>
         <ol start="7">
-          <li><a href="https://rlhfbook.com/c/07-reward-models.html">Reward Modeling</a></li>
-          <li><a href="https://rlhfbook.com/c/08-regularization.html">Regularization</a></li>
-          <li><a href="https://rlhfbook.com/c/09-instruction-tuning.html">Instruction Tuning</a></li>
-          <li><a href="https://rlhfbook.com/c/10-rejection-sampling.html">Rejection Sampling</a></li>
-          <li><a href="https://rlhfbook.com/c/11-policy-gradients.html">Policy Gradients</a></li>
-          <li><a href="https://rlhfbook.com/c/12-direct-alignment.html">Direct Alignment Algorithms</a></li>
+          <li><a href="https://rlhfbook.com/c/07-overview.html">Overview</a></li>
+          <li><a href="https://rlhfbook.com/c/08-finetuning.html">Finetuning</a></li>
+          <li><a href="https://rlhfbook.com/c/09-inference-time-scaling.html">Inference Time Scaling</a></li>
+          <li><a href="https://rlhfbook.com/c/10-RL.html">RL</a></li>
         </ol>
       </div>
 
       <div class="section">
         <h3>Advanced (WIP)</h3>
         <ol start="13">
-          <li><a href="https://rlhfbook.com/c/13-cai.html">Constitutional AI and AI Feedback</a></li>
-          <li><a href="https://rlhfbook.com/c/14-reasoning.html">Reasoning and Reinforcement Finetuning</a></li>
-          <li><a href="https://rlhfbook.com/c/15-synthetic.html">Synthetic Data</a></li>
+          <li><a href="https://rlhfbook.com/c/13-arc.html">Applications to ARC</a></li>
           <li><a href="https://rlhfbook.com/c/16-evaluation.html">Evaluation</a></li>
         </ol>
       </div>
 
       <div class="section">
-        <h3>Open Questions (WIP)</h3>
+        <h3>Open Questions</h3>
         <ol start="16">
-          <li><a href="https://rlhfbook.com/c/17-over-optimization.html">Over-optimization</a></li>
-          <li><a href="https://rlhfbook.com/c/18-style.html">Style & Information</a></li>
-          <li><a href="https://rlhfbook.com/c/19-character.html">Character Training & Model Character</a></li>
-          <li><a href="https://rlhfbook.com/c/20-product.html">Product, UX, and Post-Training</a></li>
         </ol>
       </div>
     </nav>
