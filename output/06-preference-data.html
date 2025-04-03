@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>06-preference-data</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#preference-data" id="toc-preference-data"><span
+class="toc-section-number">1</span> Preference Data</a>
+<ul>
+<li><a href="#why-we-need-preference-data"
+id="toc-why-we-need-preference-data"><span
+class="toc-section-number">1.1</span> Why We Need Preference
+Data</a></li>
+<li><a href="#collecting-preference-data"
+id="toc-collecting-preference-data"><span
+class="toc-section-number">1.2</span> Collecting Preference Data</a>
+<ul>
+<li><a href="#interface" id="toc-interface"><span
+class="toc-section-number">1.2.1</span> Interface</a></li>
+<li><a href="#rankings-vs.-ratings" id="toc-rankings-vs.-ratings"><span
+class="toc-section-number">1.2.2</span> Rankings vs. Ratings</a></li>
+<li><a href="#structured-preference-data"
+id="toc-structured-preference-data"><span
+class="toc-section-number">1.2.3</span> Structured Preference
+Data</a></li>
+<li><a href="#sourcing-and-contracts"
+id="toc-sourcing-and-contracts"><span
+class="toc-section-number">1.2.4</span> Sourcing and Contracts</a></li>
+</ul></li>
+<li><a href="#are-the-preferences-expressed-in-the-models"
+id="toc-are-the-preferences-expressed-in-the-models"><span
+class="toc-section-number">1.3</span> Are the Preferences Expressed in
+the Models?</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="preference-data"><span
+class="header-section-number">1</span> Preference Data</h1>
+<p>Preference data is the engine of preference finetuning and
+reinforcement learning from human feedback. The data is the signal
+groups collect in order to then match behaviors they desire and avoid
+the others. Within preference finetuning, many methods for collecting
+and using said data have been proposed, but until human preferences can
+be captured in a clear reward function, this process of collecting
+labeled preference data will be central to RLHF and related
+techniques.</p>
+<h2 data-number="1.1" id="why-we-need-preference-data"><span
+class="header-section-number">1.1</span> Why We Need Preference
+Data</h2>
+<p>The preference data is needed for RLHF because directly capturing
+complex human values in a single reward function is effectively
+impossible. Collecting this data to train reward models is one of the
+original ideas behind RLHF <span class="citation"
+data-cites="leike2018scalable">[@leike2018scalable]</span> and has
+continued to be used extensively throughout the emergence of modern
+language models. One of the core intuitions for <em>why this data works
+so well</em> is that it is far easier, both for humans and AI models
+supervising data collection, to differentiate between a good and a bad
+answer for a prompt than it is to generate a good answer on its own.
+This chapter focuses on the <em>mechanics</em> of getting preference
+data and the best-practices depend on the specific problem being
+solved.</p>
+<h2 data-number="1.2" id="collecting-preference-data"><span
+class="header-section-number">1.2</span> Collecting Preference Data</h2>
+<p>Getting the most out of human data involves iterative training of
+models, evolving and highly detailed data instructions, translating
+through data foundry businesses, and other challenges that add up. The
+same applies for AI feedback data – the exact balance between human and
+AI preference data used for the latest AI models is unknown. Regardless,
+the process is difficult for new organizations trying to add human data
+to their pipelines. Given the sensitivity, processes that work and
+improve the models are extracted until the performance runs out.</p>
+<p>In this chapter we detail technical decisions on how the data is
+formatted and organizational practices for collecting it.</p>
+<h3 data-number="1.2.1" id="interface"><span
+class="header-section-number">1.2.1</span> Interface</h3>
+<p>Crucial to collecting preference data is the interface by which one
+interacts with the model. An example interface is shown below from <span
+class="citation"
+data-cites="bai2022training">[@bai2022training]</span>:</p>
+<figure id="fig:preference-interface">
+<img src="images/anthropic-interface.png" class="center"
+alt="Example preference data collection interface." />
+<figcaption aria-hidden="true">Example preference data collection
+interface.</figcaption>
+</figure>
+<p>This is a <em>training-data only</em> interface. Now that these
+models are popular, applications often expose data directly to the users
+for testing. An example interaction of this form is shown below for an
+earlier version of ChatGPT.</p>
+<figure id="fig:preference-chatgpt">
+<img src="images/chatgpt-ab-test.jpeg" class="center"
+alt="Example preference data collection interface." />
+<figcaption aria-hidden="true">Example preference data collection
+interface.</figcaption>
+</figure>
+<p>This style of interface is used extensively across the industry, such
+as for <em>evaluation</em> of models given the same format. A popular
+public option to engage with models in this way is ChatBotArena <span
+class="citation"
+data-cites="chiang2024chatbot">[@chiang2024chatbot]</span>:</p>
+<figure id="fig:chatbotarena">
+<img src="images/chatbotarena.png" class="center"
+alt="Example preference data collection interface." />
+<figcaption aria-hidden="true">Example preference data collection
+interface.</figcaption>
+</figure>
+<p>For models in the wild, one of the most common techniques is to
+collect feedback on if a specific response was positive or negative. An
+example from the Ai2 playground is shown below with thumbs up and down
+indicators:</p>
+<figure id="fig:up-down">
+<img src="images/up-down-vote.png" class="center"
+alt="Example preference data collection interface with up or down arrow." />
+<figcaption aria-hidden="true">Example preference data collection
+interface with up or down arrow.</figcaption>
+</figure>
+<p>In domains other than language, the same core principles apply, even
+though these domains are not the focus of this book. For every
+Midjourney generation (and most popular image generators) they expose
+multiple responses to users. These companies then use the data of which
+response was selected to finetune their models with RLHF. Midjourney’s
+interface is shown below:</p>
+<figure id="fig:midj">
+<img src="images/midj.jpeg" class="center"
+alt="Example user interface of text-to-image-models." />
+<figcaption aria-hidden="true">Example user interface of
+text-to-image-models.</figcaption>
+</figure>
+<h3 data-number="1.2.2" id="rankings-vs.-ratings"><span
+class="header-section-number">1.2.2</span> Rankings vs. Ratings</h3>
+<p>The largest decision on how to collect preference data is if the data
+should be rankings – i.e. relative ordering of model completions – or
+ratings – i.e. scores assigned to each piece of text. Common practice is
+to train on rankings, but ratings are often used as metadata and / or
+have been explored in related literature.</p>
+<p>The most common technique for collecting preferences is to use a
+Likert scale <span class="citation"
+data-cites="likert1932technique">[@likert1932technique]</span>, which
+asks users to rate which response they prefer. For example, a 5 point
+Likert scale would look like the following:</p>
+<table>
+<caption>An example 5-wise Likert scale between two responses, A and B.
+{#tbl:likert5}</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A<span
+class="math inline">\(&gt;&gt;\)</span>B</th>
+<th style="text-align: center;">A<span
+class="math inline">\(&gt;\)</span>B</th>
+<th style="text-align: center;">Tie</th>
+<th style="text-align: center;">B<span
+class="math inline">\(&gt;\)</span>A</th>
+<th style="text-align: center;">B<span
+class="math inline">\(&gt;&gt;\)</span>A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+</tr>
+</tbody>
+</table>
+<p>Some early RLHF for language modeling works uses an 8-step Likert
+scale with levels of preference between the two responses <span
+class="citation" data-cites="bai2022training">[@bai2022training]</span>.
+An even scale removes the possibility of ties:</p>
+<table>
+<caption>An example 8-wise Likert scale between two responses, A and B.
+{#tbl:likert8}</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">A<span
+class="math inline">\(&gt;&gt;&gt;\)</span>B</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">A<span
+class="math inline">\(&gt;\)</span>B</th>
+<th style="text-align: center;">B<span
+class="math inline">\(&gt;\)</span>A</th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">B<span
+class="math inline">\(&gt;&gt;&gt;\)</span>A</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">8</td>
+</tr>
+</tbody>
+</table>
+<p>In this case <span class="citation"
+data-cites="bai2022training">[@bai2022training]</span>, and in other
+works, this information is still reduced to a binary signal for the
+training of a reward model.</p>
+<h3 data-number="1.2.3" id="structured-preference-data"><span
+class="header-section-number">1.2.3</span> Structured Preference
+Data</h3>
+<p>In many applications of RLHF and post-training, preference data can
+be created <em>automatically</em> due to innate structures of the data –
+i.e. the domains make automatic checks of correctness or preference
+possible. For example, in mathematic reasoning domains the chosen
+response can be a correct answer and the rejected an incorrect answer.
+Another example is in precise instruction following, such as the
+evaluation IFEval <span class="citation"
+data-cites="zhou2023instruction">[@zhou2023instruction]</span>, where
+prompts take the form of:</p>
+<blockquote>
+<p>Write me a short poem about a goldfish. <strong>Start each sentence
+with the letter g.</strong></p>
+</blockquote>
+<p>The second part of this query is called the constraint, and the
+preference data could be constructed with an example in the chosen
+column that follows the constraint. Constructing this preference data,
+which would be included as <em>synthetic</em> preference data involves
+prompting the same of multiple models twice. Once with the constraint
+included and once without.</p>
+<p>For example, prompting GPT-4.5-Preview with both of these gives the
+following.</p>
+<blockquote>
+<p><strong>Prompt</strong>: Write me a short poem about a goldfish.
+Start each sentence with the letter g.</p>
+<p><strong>Response</strong>: Golden swimmer, circling slow, Gleaming
+scales in water’s glow. Gentle fins dance softly by, Gazing out with
+quiet eye. Glass-bound world, a simple sphere, Gliding calmly, free of
+fear. Graceful turns in endless roam, Goldfish finds a crystal home.</p>
+</blockquote>
+<p>And without the constraint (which, it turns out, is also a lower
+quality output):</p>
+<blockquote>
+<p><strong>Prompt</strong>: Write me a short poem about a goldfish.</p>
+<p><strong>Response</strong>: In circles bright, the goldfish glides, A
+spark of sun that gently rides Through waters clear, in endless spins— A
+golden whisper, scales like fins.</p>
+<p>Its world confined, yet vast within, Each bubble breathed, a tale
+begins. In silent waves, content to roam, The goldfish dreams its bowl
+as home.</p>
+</blockquote>
+<p>Crucially, the prompt for the preference data will need to include
+the constraint. In domains outside of academic study, there are far more
+applications of preference data based on inductive biases. These have
+been shown to enable preference finetuning to have meaningful
+performance improvements across related evaluations <span
+class="citation" data-cites="lambert2024t">[@lambert2024t]</span>.</p>
+<h4 data-number="1.2.3.1" id="alternatives"><span
+class="header-section-number">1.2.3.1</span> Alternatives</h4>
+<p>There are multiple other ways to collect useful feedback data for
+RLHF that have not been pursued in as great of detail. Examples include
+using single datapoints with directional labels, e.g. as shown from Ai2
+playground above in <span class="citation"
+data-cites="fig:up-down">@fig:up-down</span>, directly with algorithms
+designed for single direction signals like Kahneman-Tversk Optimization
+(KTO) <span class="citation"
+data-cites="ethayarajh2024kto">[@ethayarajh2024kto]</span>. Other
+algorithms have been proposed with different types of feedback signals
+such as fine-grained feedback, e.g. at the token level <span
+class="citation" data-cites="wu2024fine">[@wu2024fine]</span>, or
+natural language feedback, e.g. by writing responses <span
+class="citation"
+data-cites="chen2024learning">[@chen2024learning]</span>, to provide a
+richer learning signal in exchange for a more complex data collection
+setup.</p>
+<h3 data-number="1.2.4" id="sourcing-and-contracts"><span
+class="header-section-number">1.2.4</span> Sourcing and Contracts</h3>
+<p>Getting human preference data is an involved and costly process. The
+following describes the experience of getting preference data when the
+field is moving quickly. Over time, these processes will become far more
+automated and efficient (especially with AI feedback being used for a
+larger portion of the process).</p>
+<p>The first step is sourcing the vendor to provide data (or one’s own
+annotators). Much like acquiring access to cutting-edge Nvidia GPUs,
+getting access to data providers in the peak of AI excitement is also a
+who-you-know game – those who can provide data are supply-limited. If
+you have credibility in the AI ecosystem, the best data companies will
+want you on our books for public image and long-term growth options.
+Discounts are often also given on the first batches of data to get
+training teams hooked.</p>
+<p>If you’re a new entrant in the space, you may have a hard time
+getting the data you need quickly. Getting the tail of interested buying
+parties that Scale AI had to turn away is an option for the new data
+startups. It’s likely their primary playbook to bootstrap revenue.</p>
+<p>On multiple occasions, I’ve heard of data companies not delivering
+their data contracted to them without threatening legal or financial
+action. Others have listed companies I work with as customers for PR
+even though we never worked with them, saying they “didn’t know how that
+happened” when reaching out. There are plenty of potential bureaucratic
+or administrative snags through the process. For example, the default
+terms on the contracts often prohibit the open sourcing of artifacts
+after acquisition in some fine print.</p>
+<p>Once a contract is settled the data buyer and data provider agree
+upon instructions for the task(s) purchased. There are intricate
+documents with extensive details, corner cases, and priorities for the
+data. A popular example of data instructions is the one that <a
+href="https://docs.google.com/document/d/1MJCqDNjzD04UbcnVZ-LmeXJ04-TKEICDAepXyMCBUb8/edit#heading=h.21o5xkowgmpj">OpenAI
+released for InstructGPT</a> <span class="citation"
+data-cites="ouyang2022training">[@ouyang2022training]</span>.</p>
+<p>Depending on the domains of interest in the data, timelines for when
+the data can be labeled or curated vary. High-demand areas like
+mathematical reasoning or coding must be locked into a schedule weeks
+out. Simple delays of data collection don’t always work — Scale AI et
+al. are managing their workforces like AI research labs manage the
+compute-intensive jobs on their clusters.</p>
+<p>Once everything is agreed upon, the actual collection process is a
+high-stakes time for post-training teams. All the infrastructure,
+evaluation tools, and plans for how to use the data and make downstream
+decisions must be in place.</p>
+<p>The data is delivered in weekly batches with more data coming later
+in the contract. For example, when we bought preference data for
+on-policy models we were training at HuggingFace, we had a 6 week
+delivery period. The first weeks were for further calibration and the
+later weeks were when we hoped to most improve our model.</p>
+<figure id="fig:preferences">
+<img src="images/pref-data-timeline.png" class="center"
+alt="Overview of the multi-batch cycle for obtaining human preference data from a vendor." />
+<figcaption aria-hidden="true">Overview of the multi-batch cycle for
+obtaining human preference data from a vendor.</figcaption>
+</figure>
+<p>The goal is that by week 4 or 5 we can see the data improving our
+model. This is something some frontier models have mentioned, such as
+the 14 stages in the Llama 2 data collection <span class="citation"
+data-cites="touvron2023llama">[@touvron2023llama]</span>, but it doesn’t
+always go well. At HuggingFace, trying to do this for the first time
+with human preferences, we didn’t have the RLHF preparedness to get
+meaningful bumps on our evaluations. The last weeks came and we were
+forced to continue to collect preference data generating from endpoints
+we weren’t confident in.</p>
+<p>After the data is all in, there is plenty of time for learning and
+improving the model. Data acquisition through these vendors works best
+when viewed as an ongoing process of achieving a set goal. It requires
+iterative experimentation, high effort, and focus. It’s likely that
+millions of the dollars spent on these datasets are “wasted” and not
+used in the final models, but that is just the cost of doing business.
+Not many organizations have the bandwidth and expertise to make full use
+of human data of this style.</p>
+<p>This experience, especially relative to the simplicity of synthetic
+data, makes me wonder how well these companies will be doing in the next
+decade.</p>
+<p>Note that this section <em>does not</em> mirror the experience for
+buying human-written instruction data, where the process is less of a
+time crunch.</p>
+<h2 data-number="1.3"
+id="are-the-preferences-expressed-in-the-models"><span
+class="header-section-number">1.3</span> Are the Preferences Expressed
+in the Models?</h2>
+<p>In the maturation of RLHF and related approaches, the motivation of
+them – to align models to abstract notions of human preference – has
+drifted from the practical use – to make the models more effective to
+users. A feedback loop that is not measurable due to the closed nature
+of industrial RLHF work is the check to if the behavior of the models
+matches the specification given to the data annotators during the
+process of data collection. We have limited tools to audit this, such as
+the Model Spec from OpenAI <span class="citation"
+data-cites="openai2024modelspec">[@openai2024modelspec]</span> that
+details <em>what they want their models to do</em>, but we don’t know
+exactly how this translates to data collection. This is an area to watch
+as the industry and approaches mature.</p>
+</body>
+</html>

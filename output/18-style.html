@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>18-style</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#style-and-information"
+id="toc-style-and-information"><span class="toc-section-number">1</span>
+Style and Information</a>
+<ul>
+<li><a href="#the-chattiness-paradox"
+id="toc-the-chattiness-paradox"><span
+class="toc-section-number">1.1</span> The Chattiness Paradox</a>
+<ul>
+<li><a href="#how-chattiness-emerges"
+id="toc-how-chattiness-emerges"><span
+class="toc-section-number">1.1.1</span> How Chattiness Emerges</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="style-and-information"><span
+class="header-section-number">1</span> Style and Information</h1>
+<p><em>This chapter draws on content from <a
+href="https://www.interconnects.ai/p/how-rlhf-works-2">two</a> | <a
+href="https://www.interconnects.ai/p/gpt-4o-mini-changed-chatbotarena">posts</a>
+on the role of style in post-training and evaluation of RLHF’d
+models.</em></p>
+<p>Early developments in RLHF gave it a reputation for being “just style
+transfer” or other harsh critiques on how RLHF manipulates the way
+information is presented in outputs.</p>
+<p>Style transfer, has held back the RLHF narrative for two reasons.</p>
+<p>First, when people discuss style transfer, they don’t describe this
+as being important or exciting. Style is a never-ending source of human
+value, it’s why retelling stories can result in new bestselling books
+(such as <a
+href="https://en.wikipedia.org/wiki/Sapiens:_A_Brief_History_of_Humankind">Sapiens</a>),
+and it is a fundamental part of continuing to progress our intellectual
+ecosystem. Style is intertwined with what the information is.</p>
+<p>Second, we’ve seen how different styles actually can improve
+evaluation improvements with Llama 3 <span class="citation"
+data-cites="dubey2024llama">[@dubey2024llama]</span>. The Llama 3
+Instruct models scored extremely high on ChatBotArena, and it’s accepted
+as being because they had a more fun personality. If RLHF is going to
+make language models simply more fun, that is delivered value.</p>
+<h2 data-number="1.1" id="the-chattiness-paradox"><span
+class="header-section-number">1.1</span> The Chattiness Paradox</h2>
+<p>TODO EDIT</p>
+<p>RLHF or preference fine-tuning methods are being used mostly to boost
+scores like AlpacaEval and other automatic leaderboards without shifting
+the proportionally on harder-to-game evaluations like ChatBotArena. The
+paradox is that while alignment methods like DPO give a measurable
+improvement on these models that does transfer into performance that
+people care about, a large swath of the models doing more or less the
+same thing take it way too far and publish evaluation scores that are
+obviously meaningless.</p>
+<p>For how methods like DPO can simply make the model better, some of my
+older articles on scaling DPO and if we even need PPO can help. These
+methods, when done right, make the models easier to work with and more
+enjoyable. This often comes with a few percentage point improvements on
+evaluation tools like MT Bench or AlpacaEval (and soon Arena Hard will
+show the same). The problem is that you can also use techniques like DPO
+and PPO in feedback loops or in an abundance of data to actually
+lobotomize the model at the cost of LLM-as-a-judge performance. There
+are plenty of examples.</p>
+<p>Some of the models I’m highlighting here are academic papers that
+shouldn’t entirely be judged on “if the final model passes vibes tests,”
+but are illustrative of the state of the field. These are still useful
+papers, just not something everyone will immediately use for training
+state-of-the-art models. Those come from downstream papers.</p>
+<p>During the proliferation of the DPO versus PPO debate there were many
+papers that came out with ridiculous benchmarks but no model weights
+that gathered sustained usage. When applying RLHF, there is no way to
+make an aligned version of a 7 billion parameter model actually beat
+GPT-4. It seems obvious, but there are papers claiming these results.
+Here’s a figure from a paper called Direct Nash Optimization (DNO) that
+makes the case that their model is state-of-the-art or so on
+AlpacaEval.</p>
+<p>Even the pioneering paper Self Rewarding Language Models disclosed
+ridiculous scores on Llama 2 70B. A 70B model can get closer to GPT-4
+than a 7B model can, as we have seen with Llama 3, but it’s important to
+separate the reality of models from the claims in modern RLHF papers.
+Many more methods have come and gone in the last few months. They’re the
+academic line of work that I’m following, and there’s insight there, but
+the methods that stick will be accompanied by actually useful models
+some number of months down the line.</p>
+<p>Other players in industry have released models alone (rather than
+papers) that gamify these metrics. Two examples that come to mind are
+the Mistral 7B fine-tune from Snorkel AI or a similar model from
+Contextual trained with KTO. There are things in common here — using a
+reward model to further filter the data, repeated training via some sort
+of synthetic data feedback, and scores that are too good to be true.</p>
+<p>A symptom of models that have “funky RLHF” applied to them has often
+been a length bias. This got so bad that multiple evaluation systems
+like AlpacaEval and WildBench both have linear length correction
+mechanisms in them. This patches the incentives for doping on chattiness
+to “beat GPT-4,” and adds a less gamified bug that shorter and useful
+models may actually win out. So far so good on the linear length
+controls.</p>
+<p>Regardless, aligning chat models simply for chattiness still has a
+bit of a tax in the literature. This note from the Qwen models is
+something that has been seen multiple times in early alignment
+experiments. I suspect this is mostly about data.</p>
+<p>We pretrained the models with a large amount of data, and we
+post-trained the models with both supervised finetuning and direct
+preference optimization. However, DPO leads to improvements in human
+preference evaluation but degradation in benchmark evaluation.</p>
+<p>A good example of this tradeoff done right is a model like Starling
+Beta. It’s a model that was fine-tuned from another chat model,
+OpenChat, which was in fact trained by an entire other organization.
+It’s training entirely focuses on a k-wise reward model training and PPO
+optimization, and moves it up 10 places in ChatBotArena. The average
+response length of the model increases, but in a way that’s good enough
+to actually help the human raters.</p>
+<h3 data-number="1.1.1" id="how-chattiness-emerges"><span
+class="header-section-number">1.1.1</span> How Chattiness Emerges</h3>
+<p>TODO EDIT</p>
+<p>Let’s round out this article with how RLHF is actually achieving
+chattiness at the parameter level. Most of the popular datasets for
+alignment these days are synthetic preferences where a model like GPT-4
+rates outputs from other models as the winner or the loser. Given that
+GPT-4 is known to have length and style biases for outputs that match
+itself, most of the pieces of text in the “preferred” section of the
+dataset are either from an OpenAI model or are stylistically similar to
+it. The important difference is that not all of the pieces of text in
+the dataset will have that. They’re often generated from other open
+models like Alpaca, Vicuna, or more recent examples. These models have
+very different characteristics.</p>
+<p>Next, now that we’ve established that we have a preference dataset
+where most of the chosen models are similar to ChatGPT (or some other
+model that is accepted to be “strong”), these alignment methods simply
+increase the probability of these sequences. The math is somewhat
+complicated, where the batches of data operate on many chosen-rejected
+pairs at once, but in practice, the model is doing credit assignment
+over sequences of tokens (subword pieces). Preference alignment for
+chattiness is making the sequences found in outputs of models like GPT-4
+more likely and the sequences from other, weaker models less likely.
+Repeatedly, this results in models with longer generations and
+characteristics that people like more.</p>
+<p>Those among you who are familiar with RLHF methods may ask if the KL
+constraint in the optimization should stop this from happening. The KL
+constraint is a distance term between the distribution of the original
+model and the resulting model. It helps make the optimization more
+robust to overoptimization, but that makes the border between good and
+bad models a bit more nuanced. Hence, the prevalence of vibes-based
+evaluations. Though, models tend to have enough parameters where they
+can change substantially and still satisfy the KL constraint on the data
+being measured — it can’t be the entire pertaining dataset, for
+example.</p>
+<p>As more models than ChatGPT become prevalent and strong enough for
+creating synthetic data, the distribution of outcomes we can expect from
+our aligned models should shift. There are two key places where the data
+influences this process: 1) where the text used to train the model is
+generated and 2) which LLM is used to determine which answer is the
+“winner” and “loser” in the preference learning framework. While all of
+these models have licenses or terms of service that make this practice
+technically violate an agreement of use, we’ve had more than a year of
+progress in open alignment practices relying on them in the past, so I
+don’t expect it to change. Mistral AI is the only LLM provider that
+doesn’t have a term restricting training on outputs (as far as I
+know).</p>
+</body>
+</html>

@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>11-policy-gradients</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#policy-gradient-algorithms"
+id="toc-policy-gradient-algorithms"><span
+class="toc-section-number">1</span> Policy Gradient Algorithms</a>
+<ul>
+<li><a href="#policy-gradient-algorithms-1"
+id="toc-policy-gradient-algorithms-1"><span
+class="toc-section-number">1.1</span> Policy Gradient Algorithms</a>
+<ul>
+<li><a href="#vanilla-policy-gradient"
+id="toc-vanilla-policy-gradient"><span
+class="toc-section-number">1.1.1</span> Vanilla Policy Gradient</a></li>
+<li><a href="#reinforce" id="toc-reinforce"><span
+class="toc-section-number">1.1.2</span> REINFORCE</a></li>
+<li><a href="#proximal-policy-optimization"
+id="toc-proximal-policy-optimization"><span
+class="toc-section-number">1.1.3</span> Proximal Policy
+Optimization</a></li>
+<li><a href="#group-relative-policy-optimization"
+id="toc-group-relative-policy-optimization"><span
+class="toc-section-number">1.1.4</span> Group Relative Policy
+Optimization</a></li>
+</ul></li>
+<li><a href="#implementation" id="toc-implementation"><span
+class="toc-section-number">1.2</span> Implementation</a>
+<ul>
+<li><a href="#policy-gradient-basics"
+id="toc-policy-gradient-basics"><span
+class="toc-section-number">1.2.1</span> Policy Gradient Basics</a></li>
+<li><a href="#loss-aggregation" id="toc-loss-aggregation"><span
+class="toc-section-number">1.2.2</span> Loss Aggregation</a></li>
+<li><a href="#proximal-policy-optimization-1"
+id="toc-proximal-policy-optimization-1"><span
+class="toc-section-number">1.2.3</span> Proximal Policy
+Optimization</a></li>
+<li><a href="#group-relative-policy-optimization-1"
+id="toc-group-relative-policy-optimization-1"><span
+class="toc-section-number">1.2.4</span> Group Relative Policy
+Optimization</a></li>
+</ul></li>
+<li><a href="#auxiliary-topics" id="toc-auxiliary-topics"><span
+class="toc-section-number">1.3</span> Auxiliary Topics</a>
+<ul>
+<li><a href="#generalized-advantage-estimation-gae"
+id="toc-generalized-advantage-estimation-gae"><span
+class="toc-section-number">1.3.1</span> Generalized Advantage Estimation
+(GAE)</a></li>
+<li><a href="#double-regularization"
+id="toc-double-regularization"><span
+class="toc-section-number">1.3.2</span> Double Regularization</a></li>
+<li><a href="#further-reading" id="toc-further-reading"><span
+class="toc-section-number">1.3.3</span> Further Reading</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="policy-gradient-algorithms"><span
+class="header-section-number">1</span> Policy Gradient Algorithms</h1>
+<p>The algorithms that popularized RLHF for language models were
+policy-gradient reinforcement learning algorithms. These algorithms,
+such as PPO, GRPO, and REINFORCE, use recently generated samples to
+update their model rather than storing scores in a replay buffer. In
+this section we will cover the fundamentals of the policy gradient
+algorithms and how they are used in the modern RLHF framework.</p>
+<p>At a machine learning level, this section is the subject with the
+highest complexity in the RLHF process. Though, as with most modern AI
+models, the largest determining factor on its success is the data
+provided as inputs to the process.</p>
+<p>The most popular algorithms used for RLHF has evolved over time. When
+RLHF came onto the scene with ChatGPT, it was largely known that they
+used a variant of PPO, and many initial efforts were built upon that.
+Over time, multiple research projects showed the promise of REINFORCE
+style algorithms <span class="citation"
+data-cites="ahmadian2024back">[@ahmadian2024back]</span> <span
+class="citation"
+data-cites="wang2024helpsteer2p">[@wang2024helpsteer2p]</span>, touted
+for its simplicity over PPO without a reward model (saves memory and
+therefore the number of GPUs required) and with simpler value estimation
+(no GAE). More algorithms have emerged, including Group Relative Policy
+Optimization, which is particularly popular with reasoning tasks, but in
+general many of these algorithms can be tuned to fit a specific task. In
+this chapter, we cover the core policy gradient setup and the three
+algorithms mentioned above due to their central role in the
+establishment of a canonical RLHF literature.</p>
+<p>For definitions of symbols, see the problem setup chapter.</p>
+<h2 data-number="1.1" id="policy-gradient-algorithms-1"><span
+class="header-section-number">1.1</span> Policy Gradient Algorithms</h2>
+<p>Reinforcement learning algorithms are designed to maximize the
+future, discounted reward across a trajectory of states, <span
+class="math inline">\(s \in \mathcal{S}\)</span>, and actions, <span
+class="math inline">\(a \in \mathcal{A}\)</span> (for more notation, see
+Chapter 3, Definitions). The objective of the agent, often called the
+<em>return</em>, is the sum of discounted, future rewards (where <span
+class="math inline">\(\gamma\in [0,1)\)</span> is a factor that
+prioritizes near term rewards) at a given time <span
+class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[G_t = R_{t+1} + \gamma R_{t+2} + \cdots
+= \sum_{k=o}^\infty \gamma^k R_{t+k+1}.\]</span></p>
+<p>The return definition can also be estimated as: <span
+class="math display">\[G_{t} = \gamma{G_{t+1}} + R_{t+1}.\]</span></p>
+<p>This return is the basis for learning a value function <span
+class="math inline">\(V(s)\)</span> that is the estimated future return
+given a current state:</p>
+<p><span class="math display">\[V(s) = \mathbb{E}\big[G_t | S_t = s
+\big].\]</span></p>
+<p>All policy gradient algorithms solve an objective for such a value
+function induced from a specific policy, <span
+class="math inline">\(\pi(s|a)\)</span>.</p>
+<p>Where <span class="math inline">\(d_\pi(s)\)</span> is the stationary
+distribution of states induced by policy <span
+class="math inline">\(\pi(s)\)</span>, the optimization is defined as:
+<span class="math display">\[
+J(\theta)
+\;=\;
+\sum_{s} d_\pi(s) V_\pi(s),
+\]</span></p>
+<p>The core of policy gradient algorithms is computing the gradient with
+respect to the finite time expected return over the current policy. With
+this expected return, <span class="math inline">\(J\)</span>, the
+gradient can be computed as follows, where <span
+class="math inline">\(\alpha\)</span> is the learning rate:</p>
+<p><span class="math display">\[\theta \leftarrow \theta + \alpha
+\nabla_\theta J(\theta)\]</span></p>
+<p>The core implementation detail is how to compute said gradient.
+Schulman et al. 2015 provides an overview of the different ways that
+policy gradients can be computed <span class="citation"
+data-cites="schulman2015high">[@schulman2015high]</span>. The goal is to
+<em>estimate</em> the exact gradient <span class="math inline">\(g :=
+\nabla_\theta \mathbb{E}[\sum_{t=0}^\infty r_t]\)</span>, of which,
+there are many forms similar to:</p>
+<p><span class="math display">\[ g = \mathbb{E}\Big[\sum_{t=0}^\infty
+\Psi_t \nabla_\theta \text{log} \pi_\theta(a_t|s_t) \Big], \]</span></p>
+<p>Where <span class="math inline">\(\Psi_t\)</span> can be the
+following (where the rewards can also often be discounted by <span
+class="math inline">\(\gamma\)</span>):</p>
+<ol type="1">
+<li><span class="math inline">\(\sum_{t=0}^{\infty} r_t\)</span>: total
+reward of the trajectory.</li>
+<li><span class="math inline">\(\sum_{t&#39;=t}^{\infty}
+r_{t&#39;}\)</span>: reward following action <span
+class="math inline">\(a_t\)</span>, also described as the return, <span
+class="math inline">\(G\)</span>.</li>
+<li><span class="math inline">\(\sum_{t&#39;=t}^{\infty} r_{t&#39;} -
+b(s_t)\)</span>: baselined version of previous formula.</li>
+<li><span class="math inline">\(Q^{\pi}(s_t, a_t)\)</span>: state-action
+value function.</li>
+<li><span class="math inline">\(A^{\pi}(s_t, a_t)\)</span>: advantage
+function, which yields the lowest possible theoretical variance if it
+can be computed accurately.</li>
+<li><span class="math inline">\(r_t + V^{\pi}(s_{t+1}) -
+V^{\pi}(s_t)\)</span>: TD residual.</li>
+</ol>
+<p>The <em>baseline</em> is a value used to reduce variance of policy
+updates (more on this below).</p>
+<p>For language models, some of these concepts do not make as much
+sense. For example, we know that for a deterministic policy the value
+function is defined as <span class="math inline">\(V(s) = \max_a
+Q(s,a)\)</span> or for a stochastic policy as <span
+class="math inline">\(V(s) = \mathbb{E}_{a \sim
+\pi(a|s)}[Q(s,a)]\)</span>. If we define <span
+class="math inline">\(s+a\)</span> as the continuation <span
+class="math inline">\(a\)</span> to the prompt <span
+class="math inline">\(s\)</span>, then <span class="math inline">\(Q(s,
+a) = V(s+a)\)</span>, which gives a different advantage trick:</p>
+<p><span class="math display">\[A(s,a) = Q(s,a) - V(s) = V(s + a) - V(s)
+= r + \gamma V(s + a) - V(s)\]</span></p>
+<p>Which is a combination of the reward, the value of the prompt, and
+the discounted value of the entire utterance.</p>
+<h3 data-number="1.1.1" id="vanilla-policy-gradient"><span
+class="header-section-number">1.1.1</span> Vanilla Policy Gradient</h3>
+<p>The vanilla policy gradient implementation optimizes the above
+expression for <span class="math inline">\(J(\theta)\)</span> by
+differentiating with respect to the policy parameters. A simple version,
+with respect to the overall return, is:</p>
+<p><span class="math display">\[\nabla_\theta J(\pi_\theta) =
+\mathbb{E}_\tau \left[ \sum_{t=0}^T \nabla_\theta \log
+\pi_\theta(a_t|s_t) R_t \right]\]</span></p>
+<p>A common problem with vanilla policy gradient algorithms is the high
+variance in gradient updates, which can be mitigated in multiple ways.
+In order to alleviate this, various techniques are used to normalize the
+value estimation, called <em>baselines</em>. Baselines accomplish this
+in multiple ways, effectively normalizing by the value of the state
+relative to the downstream action (e.g. in the case of Advantage, which
+is the difference between the Q value and the value). The simplest
+baselines are averages over the batch of rewards or a moving average.
+Even these baselines can de-bias the gradients so <span
+class="math inline">\(\mathbb{E}_{a \sim \pi(a|s)}[\nabla_\theta \log
+\pi_\theta(a|s)] = 0\)</span>, improving the learning signal
+substantially.</p>
+<p>Many of the policy gradient algorithms discussed in this chapter
+build on the advantage formulation of policy gradient:</p>
+<p><span class="math display">\[\nabla_\theta J(\pi_\theta) =
+\mathbb{E}_\tau \left[ \sum_{t=0}^T \nabla_\theta \log
+\pi_\theta(a_t|s_t) A^{\pi_\theta}(s_t, a_t) \right]\]</span></p>
+<p>A core piece of the policy gradient implementation involves taking
+the derivative of the probabilistic policies. This comes from:</p>
+<p><span class="math display">\[\nabla_\theta \log \pi_\theta(a|s) =
+\frac{\nabla_\theta \pi_\theta(a|s)}{\pi_\theta(a|s)}\]</span></p>
+<p>Which is derived from the chain rule:</p>
+<p><span class="math display">\[\nabla_\theta \log x = \frac{1}{x}
+\nabla_\theta x\]</span></p>
+<p>We will use this later on in the chapter.</p>
+<h3 data-number="1.1.2" id="reinforce"><span
+class="header-section-number">1.1.2</span> REINFORCE</h3>
+<p>The algorithm REINFORCE is likely a backronym, but the components of
+the algorithms it represents are quite relevant for modern reinforcement
+learning algorithms. Defined in the seminal paper <em>Simple statistical
+gradient-following algorithms for connectionist reinforcement
+learning</em> <span class="citation"
+data-cites="williams1992simple">[@williams1992simple]</span>:</p>
+<blockquote>
+<p>The name is an acronym for “REward Increment = Nonnegative Factor X
+Offset Reinforcement X Characteristic Eligibility.”</p>
+</blockquote>
+<p>The three components of this are how to do the <em>reward
+increment</em>, a.k.a. the policy gradient step. It has three pieces to
+the update rule:</p>
+<ol type="1">
+<li>Nonnegative factor: This is the learning rate (step size) that must
+be a positive number, e.g. <span class="math inline">\(\alpha\)</span>
+below.</li>
+<li>Offset Reinforcement: This is a baseline <span
+class="math inline">\(b\)</span> or other normalizing factor of the
+reward to improve stability.</li>
+<li>Characteristic Eligibility: This is how the learning becomes
+attributed per token. It can be a general value, <span
+class="math inline">\(e\)</span> per parameter, but is often log
+probabilities of the policy in modern equations.</li>
+</ol>
+<p>Thus, the form looks quite familiar:</p>
+<p><span class="math display">\[ \Delta_\theta = \alpha(r - b)e
+\]</span> {#eq:REINFORCE_BASIC}</p>
+<p>With more modern notation and the generalized return <span
+class="math inline">\(G\)</span>, the REINFORCE operator appears as:</p>
+<p><span class="math display">\[
+\nabla_{\theta}\,J(\theta)
+\;=\;
+\mathbb{E}_{\tau \sim \pi_{\theta}}\!\Big[
+    \sum_{t=0}^{T}
+    \nabla_{\theta} \log \pi_{\theta}(a_t \mid s_t)\,(G_t - b)
+\Big],
+\]</span></p>
+<p>Here, the value <span class="math inline">\(G_t - b(s_t)\)</span> is
+the <em>advantage</em> of the policy at the current state, so we can
+reformulate the policy gradient in a form that we continue later with
+the advantage, <span class="math inline">\(A\)</span>:</p>
+<p><span class="math display">\[
+\nabla_{\theta}\,J(\theta)
+\;=\;
+\mathbb{E}_{\tau \sim \pi_{\theta}}\!\Big[
+    \sum_{t=0}^{T}
+    \nabla_{\theta} \log \pi_{\theta}(a_t \mid s_t)\,A_t
+\Big],
+\]</span></p>
+<p>REINFORCE is a specific implementation of vanilla policy gradient
+that uses a Monte Carlo estimator of the gradient.</p>
+<p>REINFORCE can be run without value network – the value network is for
+the baseline in the policy gradient. PPO on the other hand needs the
+value network to accurately compute the advantage function.</p>
+<h4 data-number="1.1.2.1" id="reinforce-leave-one-out-rloo"><span
+class="header-section-number">1.1.2.1</span> REINFORCE Leave One Out
+(RLOO)</h4>
+<p>The core implementation detail of REINFORCE Leave One Out versus
+standard REINFORCE is that it takes the average reward of the
+<em>other</em> samples in the batch to compute the baseline – rather
+than averaging over all rewards in the batch <span class="citation"
+data-cites="huang2024putting">[@huang2024putting]</span>, <span
+class="citation"
+data-cites="ahmadian2024back">[@ahmadian2024back]</span>, <span
+class="citation" data-cites="kool2019buy">[@kool2019buy]</span>.</p>
+<p>Crucially, this only works when generating multiple responses per
+prompt, which is common practice in multiple domains of finetuning
+language models with RL.</p>
+<p>Specifically, for the REINFORCE Leave-One-Out (RLOO) baseline, given
+<span class="math inline">\(K\)</span> sampled trajectories or actions
+<span class="math inline">\(a_1, \dots, a_K\)</span>, to a given prompt
+<span class="math inline">\(s\)</span> we define the baseline explicitly
+as the following <em>per-prompt</em>:</p>
+<p><span class="math display">\[
+b(c, a_k) = \frac{1}{K-1}\sum_{i=1, i\neq k}^{K} R(s, a_i),
+\]</span></p>
+<p>resulting in the advantage:</p>
+<p><span class="math display">\[
+A(s, a_k) = R(s, a_k) - b(s, a_k).
+\]</span></p>
+<p>Equivalently, this can be expressed as:</p>
+<p><span class="math display">\[
+A(s, a_k) = \frac{K}{K - 1}\left(R(s, a_k) - \frac{1}{K}\sum_{i=1}^{K}
+R(s, a_i)\right).
+\]</span></p>
+<p>This is a simple, low-variance advantage update that is very similar
+to GRPO, which will be discussed later, where REINFORCE is used with a
+different location of KL penalty and without step-size clipping. Still,
+the advantage from RLOO could be combined with the clipping of PPO,
+showing how similar many of these algorithms are.</p>
+<p>RLOO and other algorithms that do not use a value network assign the
+advantage (or reward) of the sequence to every token for the loss
+computation. Algorithms that use a learned value network, such as PPO,
+assign a different value to every token individually, discounting from
+the final reward achieved at the EOS token. For example, with the KL
+divergence distance penalty, RLOO sums it over the completion while PPO
+and similar algorithms compute it on a per-token basis and subtract it
+from the reward (or the advantage, in the case of GRPO). These details
+and trade-offs are discussed later in the chapter.</p>
+<!-- A nice formulation of LM RL loss functions is found here https://arxiv.org/pdf/2502.01600 -->
+<h3 data-number="1.1.3" id="proximal-policy-optimization"><span
+class="header-section-number">1.1.3</span> Proximal Policy
+Optimization</h3>
+<p>Proximal Policy Optimization (PPO) <span class="citation"
+data-cites="schulman2017proximal">[@schulman2017proximal]</span> is one
+of the foundational algorithms to Deep RL’s successes (such as OpenAI’s
+DOTA 5 <span class="citation"
+data-cites="berner2019dota">[@berner2019dota]</span> and large amounts
+of research). The loss function is as follows per sample:</p>
+<p><span class="math display">\[J(\theta) =
+\min\left(\frac{\pi_\theta(a|s)}{\pi_{\theta_{old}}(a|s)}A, \text{clip}
+\left( \frac{\pi_\theta(a|s)}{\pi_{\theta_{old}}(a|s)}, 1-\varepsilon,
+1+\varepsilon \right) A \right).\]</span> {#eq:PPO_EQN}</p>
+<p>For language models, the loss is computed per token, which
+intuitively can be grounded in how one would compute the probability of
+the entire sequence of autoregressive predictions – by a product of
+probabilities. From there, the common implementation is with
+<em>log-probabilities</em> that make the computation far more
+tractable.</p>
+<p><span class="math display">\[ J(\theta) = \frac{1}{|a|}
+\sum_{t=0}^{|a|}
+\min\left(\frac{\pi_\theta(a_{t}|s_{t})}{\pi_{\theta_{old}}(a_{t}|s_{t})}A_{t},
+\text{clip} \left(
+\frac{\pi_\theta(a_{t}|s_{t})}{\pi_{\theta_{old}}(a_{t}|s_{t})},
+1-\varepsilon, 1+\varepsilon \right) A_{t} \right).  \]</span>
+{#eq:PPO_EQN_EXPANDED}</p>
+<p>This is the per-token version of PPO, which also applies to other
+policy-gradient methods, but is explored further later in the
+implementation section of this chapter. Here, the term for averaging by
+the number of tokens in the action, <span
+class="math inline">\(\frac{1}{|a|}\)</span>, comes from common
+implementation practices, but is not in a formal derivation of the loss
+(shown in <span class="citation"
+data-cites="liu2025understanding">[@liu2025understanding]</span>).</p>
+<p>Here we will explain the difference cases this loss function triggers
+given various advantages and policy ratios. At an implementation level,
+the inner computations for PPO involve standard policy gradient and a
+clipped policy gradient.</p>
+<p>To understand how different situations emerge, we can define the
+policy ratio as:</p>
+<p><span class="math display">\[R(\theta) =
+\frac{\pi_\theta(a|s)}{\pi_{\theta_{old}}(a|s)}\]</span>
+{#eq:PPO_POL_RATIO}</p>
+<p>The policy ratio is a centerpiece of PPO and related algorithms. It
+emerges from computing the gradient of a policy and controls the
+parameter updates in a very intuitive way. For any batch of data, the
+policy ratio starts at 1 for the first gradient step for that batch
+(common practice is to take 1-4 gradient steps per batch with policy
+gradient algorithms). Then, the policy ratio will be above one if that
+gradient step increased the likelihood of certain tokens with an
+associated positive advantage, or less than one for the other case.</p>
+<p>The policy ratio and advantage together can occur in a few different
+configurations.</p>
+<p>The first case is when the advantage is positive and the policy ratio
+exceeds <span class="math inline">\(1+\varepsilon\)</span> (meaning that
+the new policy is more likely to take said action), which is clipped,
+and the objective becomes:</p>
+<p><span class="math display">\[J(\theta) = \min \left(R(\theta), (1 +
+\varepsilon)\right)A = (1 + \varepsilon)A \]</span></p>
+<p>This will increase the probability ratio, making the action even more
+likely, but only up until the clipping parameter epsilon. The similar
+conditions are when the advantage is still positive, but the likelihood
+ratio shifts.</p>
+<p>For positive advantage and ratio less than <span
+class="math inline">\(1-\varepsilon\)</span>, a we get a partially
+substituted equation:</p>
+<p><span class="math display">\[J(\theta) = \min \left(R(\theta), (1 -
+\varepsilon)\right)A\]</span></p>
+<p>That reduces to</p>
+<p><span class="math display">\[J(\theta) = R(\theta)A\]</span></p>
+<p>because of the less than assumption.</p>
+<p>Similarly, if the probability ratio is not clipping, the objective
+also reduces to the <span
+class="math inline">\(\min(R(\theta),R(\theta))\)</span>, yielding a
+standard policy gradient with an advantage estimator.</p>
+<p>If the advantage is negative, this looks similar. A clipped objective
+will occur when <span class="math inline">\(R(\theta) &lt;
+(1-\varepsilon)\)</span>, appearing through:</p>
+<p><span class="math display">\[J(\theta) = \min \left(R(\theta)A, (1 -
+\varepsilon)A\right),\]</span></p>
+<p>Which, because <span class="math inline">\(A&lt;0\)</span> we have
+<span class="math inline">\(R(\theta)A &gt; (1-\varepsilon)A\)</span>
+and can flip the min to the max when pulling <span
+class="math inline">\(A\)</span> from the equation, is equivalent to</p>
+<p><span class="math display">\[J(\theta) = \max \left(R(\theta), (1 -
+\varepsilon)\right)A.\]</span></p>
+<p>Then the objective becomes:</p>
+<p><span class="math display">\[J(\theta) = (1 -
+\varepsilon)A\]</span></p>
+<p>The other cases follow as above, inverted, and are left as an
+exercise to the reader.</p>
+<p>All of these are designed to make the behaviors where advantage is
+positive more likely and keep the gradient step within the trust region.
+It is crucial to remember that PPO within the trust region is the same
+as standard forms of policy gradient.</p>
+<h3 data-number="1.1.4" id="group-relative-policy-optimization"><span
+class="header-section-number">1.1.4</span> Group Relative Policy
+Optimization</h3>
+<p>Group Relative Policy Optimization (GRPO) is introduced in
+DeepSeekMath <span class="citation"
+data-cites="shao2024deepseekmath">[@shao2024deepseekmath]</span>, and
+used in other DeepSeek works, e.g. DeepSeek-V3 <span class="citation"
+data-cites="liu2024deepseek">[@liu2024deepseek]</span> and DeepSeek-R1
+<span class="citation"
+data-cites="guo2025deepseek">[@guo2025deepseek]</span>. GRPO can be
+viewed as PPO-inspired algorithm with a very similar surrogate loss, but
+it avoids learning a value function with another copy of the original
+policy language model (or another checkpoint for initialization). This
+brings two posited benefits:</p>
+<ol type="1">
+<li>Avoiding the challenge of learning a value function from a LM
+backbone, where research hasn’t established best practices.</li>
+<li>Saves memory by not needing to keep another set of model weights in
+memory.</li>
+</ol>
+<p>GRPO does this by simplifying the value estimation and assigning the
+same value to every token in the episode (i.e. in the completion to a
+prompt, each token gets assigned the same value rather than discounted
+rewards in a standard value function) by estimating the advantage or
+baseline. The estimate is done by collecting multiple completions (<span
+class="math inline">\(a_i\)</span>) and rewards (<span
+class="math inline">\(r_i\)</span>), i.e. a Monte Carlo estimate, from
+the same initial state / prompt (<span
+class="math inline">\(s\)</span>).</p>
+<p>To state this formally, the GRPO objective is very similar to the PPO
+objective above. For GRPO, the loss is accumulated over a group of
+responses <span class="math inline">\(\{a_1, a_2, ..., a_G\}\)</span> to
+a given question <span class="math inline">\(s\)</span>:</p>
+<p><span class="math display">\[J(\theta) = \frac{1}{G}\sum_{i=1}^G
+\left(\min\left(\frac{\pi_\theta(a_i|s)}{\pi_{\theta_{old}}(a_i|s)}A_i,
+\text{clip} \left( \frac{\pi_\theta(a_i|s)}{\pi_{\theta_{old}}(a_i|s)},
+1-\varepsilon, 1+\varepsilon \right) A_i \right) - \beta
+D_{KL}(\pi_\theta||\pi_{ref})\right).\]</span> {#eq:GRPO}</p>
+<p>As above, we can expand this into a per-token loss computation:</p>
+<p><span class="math display">\[ J(\theta) =
+\frac{1}{G}\sum_{i=1}^G  \frac{1}{|a_i|} \sum_{t=1}^{|a_i|} \left(
+\min\left(\frac{\pi_\theta(a_{i,t}|s_{i,t})}{\pi_{\theta_{old}}(a_{i,t}|s_{i,t})}A_{i,t},
+\text{clip} \left(
+\frac{\pi_\theta(a_{i,t}|s_{i,t})}{\pi_{\theta_{old}}(a_{i,t}|s_{i,t})},
+1-\varepsilon, 1+\varepsilon \right) A_{i,t} \right) - \beta
+D_{KL}(\pi_\theta(\cdot|s_{i,t})||\pi_{ref}(\cdot|s_{i,t}))
+\right)  \]</span> {#eq:GRPO_token}</p>
+<p>Note that relative to PPO, the standard implementation of GRPO
+includes the KL distance in the loss. With the advantage computation for
+the completion index <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[A_i = \frac{r_i - \text{mean}({r_1, r_2,
+\cdots, r_G})}{\text{std}({r_1, r_2, \cdots, r_G})}.\]</span>
+{#eq:GRPO_ADV}</p>
+<p>Intuitively, the GRPO update is comparing multiple answers to a
+single question within a batch. The model learns to become more like the
+answers marked as correct and less like the others. This is a very
+simple way to compute the advantage, which is the measure of how much
+better a specific action is than the average at a given state. Relative
+to PPO, REINFORCE, and broadly RLHF performed with a reward model rating
+(relative to output reward), GRPO is often run with a far higher number
+of samples per prompt. Here, the current policy generates multiple
+responses to a given prompt, and the group-wise GRPO advantage estimate
+is given valuable context.</p>
+<p>The advantage computation for GRPO has trade-offs in its biases. The
+normalization by standard deviation is rewarding questions in a batch
+that have a low variation in answer correctness. For questions with
+either nearly all correct or all incorrect answers, the standard
+deviation will be lower and the advantage will be higher. <span
+class="citation"
+data-cites="liu2025understanding">[@liu2025understanding]</span>
+proposes removing the standard deviation term given this bias, but this
+comes at the cost of down-weighing questions that were all incorrect
+with a few correct answers, which could be seen as valuable learning
+signal.</p>
+<p><span class="citation" data-cites="eq:GRPO_ADV">@eq:GRPO_ADV</span>
+is the implementation of GRPO when working with outcome supervision
+(either a standard reward model or a single verifiable reward) and a
+different implementation is needed with process supervision. In this
+case, GRPO computes the advantage as the sum of the normalized rewards
+for the following reasoning steps.</p>
+<p>Finally, GRPO’s advantage estimation can also be applied without the
+PPO clipping to more vanilla versions of policy gradient
+(e.g. REINFORCE), but it is not the canonical form.</p>
+<h2 data-number="1.2" id="implementation"><span
+class="header-section-number">1.2</span> Implementation</h2>
+<p>Compared to the original Deep RL literature where many of these
+algorithms were developed, implementing RL for optimizing language
+models or other large AI models requires many small implementation
+details. In this section, we highlight some key factors that
+differentiate the implementations of popular algorithms.</p>
+<p>There are many other small details that go into this training. For
+example, when doing RLHF with language models a crucial step is
+generating text that will then be rated by the reward model. Under
+normal circumstances, the model should generate a end-of-sequence (EOS)
+token indicating it finished generating, but a common practice is to put
+a hard cap on generation length to efficiently utilize infrastructure. A
+failure mode of RLHF is that the model is regularly truncated in its
+answers, driving the ratings from the reward model out of distribution
+and to unpredictable scores. The solution to this is to <em>only</em>
+run a reward model ranking on the <code>eos_token</code>, and to
+otherwise assign a penalty to the model for generating too long.</p>
+<p>The popular open-source tools for RLHF have a large variance in
+implementation details across the algorithms (see table 10 in <span
+class="citation"
+data-cites="ivison2024unpacking">[@ivison2024unpacking]</span>). Some
+decisions not covered here include:</p>
+<ul>
+<li><strong>Value network initialization</strong>: The internal learned
+value network used by PPO and other similar algorithms can be started
+from a different model of the same architecture or randomly selected
+weights. This can have a large impact on performance.</li>
+<li><strong>Reward normalization, reward whitening, and/or advantage
+whitening</strong>: Where normalization bounds all the values from the
+RM (or environment) to be between 0 and 1, which can help with learning
+stability, <a
+href="https://en.wikipedia.org/wiki/Whitening_transformation">whitening</a>
+the rewards or the advantage estimates to uniform covariates can provide
+an even stronger boost to stability.</li>
+<li><strong>Different KL estimators</strong>: With complex language
+models, precisely computing the KL divergence between models can be
+complex, so multiple approximations are used to substitute for an exact
+calculation <span class="citation"
+data-cites="schulman2016klapprox">[@schulman2016klapprox]</span>.</li>
+<li><strong>KL controllers</strong>: Original implementations of PPO and
+related algorithms had dynamic controllers that targeted specific KLs
+and changed the penalty based on recent measurements. Most modern RLHF
+implementations use static KL penalties, but this can also vary.</li>
+</ul>
+<p>For more details on implementation details for RLHF, see <span
+class="citation" data-cites="huang2024n">[@huang2024n]</span>. For
+further information on the algorithms, see <span class="citation"
+data-cites="weng2018PG">[@weng2018PG]</span>.</p>
+<h3 data-number="1.2.1" id="policy-gradient-basics"><span
+class="header-section-number">1.2.1</span> Policy Gradient Basics</h3>
+<p>A simple implementation of policy gradient, using advantages to
+estimate the gradient to prepare for advanced algorithms such as PPO and
+GRPO follows:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pg_loss <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> ratio</span></code></pre></div>
+<p>Ratio here is the logratio of the new policy model probabilities
+relative to the reference model.</p>
+<p>In order to understand this equation it is good to understand
+different cases that can fall within a batch of updates. Remember that
+we want the loss to <em>decrease</em> as the model gets better at the
+task.</p>
+<p>Case 1: Positive advantage, so the action was better than the
+expected value of the state. We want to reinforce this. In this case,
+the model will make this more likely with the negative sign. To do so
+it’ll increase the logratio. A positive logratio, or sum of log
+probabilities of the tokens, means that the model is more likely to
+generate those tokens.</p>
+<p>Case 2: Negative advantage, so the action was worse than the expected
+value of the state. This follows very similarly. Here, the loss will be
+positive if the new model was more likely, so the model will try to make
+it so the policy parameters make this completion less likely.</p>
+<p>Case 3: Zero advantage, so no update is needed. The loss is zero,
+don’t change the policy model.</p>
+<h3 data-number="1.2.2" id="loss-aggregation"><span
+class="header-section-number">1.2.2</span> Loss Aggregation</h3>
+<p>The question when implementing any policy gradient algorithm with
+language models is: How do you sum over the KL distance and loss to
+design different types of value-attribution.</p>
+<p>Consider an example where we have the following variables, with a
+batch size B and sequence length L.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>advantages <span class="co"># [B, 1]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>per_token_probability_ratios <span class="co"># [B, L]</span></span></code></pre></div>
+<p>We can approximate the loss as above with a batch multiplication of
+<code>pg_loss = -advantages * ratio</code>. Multiplying these together
+is broadcasting the advantage per each completion in the batch (as in
+the outcome reward setting, rather than a per-token value model setting)
+to be the same. They are then multiplied by the per token probability
+logratios.</p>
+<p>In cases where a value network is used, it is easy to see that the
+different losses can behave very differently. When outcome rewards are
+used, the advantages are set to be the same per token, so the difference
+in per-token probability is crucial to policy gradient learning
+dynamics.</p>
+<p>In the below implementations of GRPO and PPO, the loss is summed over
+the tokens in the completion:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sequence_loss <span class="op">=</span> ((per_token_loss <span class="op">*</span> completion_mask).<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">/</span> <span class="op">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             completion_mask.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>)).mean()</span></code></pre></div>
+<p>The operation above is very similar to a <code>masked_mean</code>
+operation. An alternative is to average over each token
+individually.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>token_loss <span class="op">=</span> ((per_token_loss <span class="op">*</span> completion_mask).<span class="bu">sum</span>() <span class="op">/</span> <span class="op">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>            completion_mask.<span class="bu">sum</span>())</span></code></pre></div>
+<p>Intuitively, it could seem that averaging over the sequence is best,
+as we are trying to reward the model for <em>outcomes</em> and the
+specific tokens are not as important. This can introduce subtle forms of
+bias. Consider two sequences of different lengths, assigned two
+different advantages <code>a_1</code> and <code>a_2</code>.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>seq_1_advs <span class="op">=</span> [a_1, a_1, a_1, a_1, a_1] <span class="co"># 5 tokens</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>seq_2_advs <span class="op">=</span> [a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2] <span class="co"># 10 tokens</span></span></code></pre></div>
+<p>Now, consider if the last token in each sequence is important to the
+advantage being positive, so it gets increased over the multiple
+gradient steps per batch. When you convert these to per-token losses,
+you could get something approximate to:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>seq_1_losses <span class="op">=</span> [<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">10</span>] <span class="co"># 5 tokens</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>seq_2_losses <span class="op">=</span> [<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">10</span>] <span class="co"># 10 tokens</span></span></code></pre></div>
+<p>If we average these over the sequences, we will get the following
+numbers:</p>
+<pre><code>seq_1_loss = -2.8
+seq_2_loss = -1.9</code></pre>
+<p>If we average these together weighting sequences equally, we get a
+loss of -2.35. If, instead we apply the loss equally to each token, the
+loss would be computed by summing all the per token losses and
+normalizing by length, which in this case would be -2.27. If the
+sequences had bigger differences, the two loss values can have
+substantially different values.</p>
+<p>Another way to aggregate loss is discussed in [TODO CITE DrGRPO] that
+has its origins in pre language model RL research, where every per-token
+loss is normalized by the max sequence length set in the experiment.
+This would change how the losses compare across batches per tokens in
+the above example.</p>
+<p>In practice, the setup that is best likely is the one that is suited
+to the individual, online learning setup. Often in RLHF methods the
+method with the best numerical stability and or the least variance in
+loss could be preferred.</p>
+<h3 data-number="1.2.3" id="proximal-policy-optimization-1"><span
+class="header-section-number">1.2.3</span> Proximal Policy
+Optimization</h3>
+<p>There are many, many implementations of PPO available. The core
+<em>loss</em> computation is shown below. Crucial to stable performance
+is also the <em>value</em> computation, where multiple options exist
+(including multiple options for the <em>value model</em> loss).</p>
+<p>Note that the reference policy (or old logprobs) here are from the
+time the generations were sampled and not necessarily the reference
+policy. The reference policy is only used for the KL distance
+constraint/penalty.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># B: Batch Size, L: Sequence Length, G: Num of Generations</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply KL penalty to rewards</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rewards <span class="op">=</span> rewards <span class="op">-</span> <span class="va">self</span>.beta <span class="op">*</span> per_token_kl  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get value predictions</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> value_net(completions)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute simple advantages</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> rewards <span class="op">-</span> values.detach()  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize advantages (optional but stable)</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> (advantages <span class="op">-</span> advantages.mean()) <span class="op">/</span> (advantages.std() <span class="op">+</span> <span class="fl">1e-8</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> advantages.unsqueeze(<span class="dv">1</span>)  <span class="co"># Shape: (B*G, 1)</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability ratio between new and old policies</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>ratio <span class="op">=</span> torch.exp(new_per_token_logps <span class="op">-</span> per_token_logps)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># PPO clipping objective</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> <span class="va">self</span>.cliprange  <span class="co"># e.g. 0.2</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>pg_losses1 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> ratio  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>pg_losses2 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> torch.clamp(ratio, <span class="fl">1.0</span> <span class="op">-</span> eps, <span class="fl">1.0</span> <span class="op">+</span> eps)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>pg_loss_max <span class="op">=</span> torch.<span class="bu">max</span>(pg_losses1, pg_losses2)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple value function loss</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>vf_loss <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> ((rewards <span class="op">-</span> values) <span class="op">**</span> <span class="dv">2</span>)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine policy and value losses</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>per_token_loss <span class="op">=</span> pg_loss_max <span class="op">+</span> <span class="va">self</span>.vf_coef <span class="op">*</span> vf_loss  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply completion mask and compute final loss</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> ((per_token_loss <span class="op">*</span> completion_mask).<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">/</span> completion_mask.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>)).mean()</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a> <span class="co"># Scalar</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute metrics for logging</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute clipping fraction</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    clip_frac <span class="op">=</span> ((pg_losses2 <span class="op">&gt;</span> pg_losses1).<span class="bu">float</span>() <span class="op">*</span> completion_mask).<span class="bu">sum</span>() <span class="op">/</span> completion_mask.<span class="bu">sum</span>()</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute approximate KL</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    approx_kl <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> ((new_per_token_logps <span class="op">-</span> per_token_logps)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute value loss for logging</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    value_loss <span class="op">=</span> vf_loss.mean()</span></code></pre></div>
+<p>The core piece to understand with PPO is how the policy gradient loss
+is updated. Focus on these three lines:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pg_losses1 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> ratio  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pg_losses2 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> torch.clamp(ratio, <span class="fl">1.0</span> <span class="op">-</span> eps, <span class="fl">1.0</span> <span class="op">+</span> eps)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pg_loss_max <span class="op">=</span> torch.<span class="bu">max</span>(pg_losses1, pg_losses2)  <span class="co"># Shape: (B*G, L)</span></span></code></pre></div>
+<p><code>pg_losses1</code> is the same as the vanilla advantage-based PR
+loss above, which is included in PPO, but the loss (and gradient update)
+can be clipped. Though, PPO is controlling the update size to not be too
+big. Because losses can be negative, we must create a more conservative
+version of the vanilla policy gradient update rule.</p>
+<p>We know that if we <em>do not</em> constrain the loss, the policy
+gradient algorithm will update the weights exactly to the new
+probability distribution. Hence, by clamping the logratio’s, PPO is
+limiting the distance that the update can move the policy
+parameters.</p>
+<p>Finally, the max of two is taken as mentioned above, in order to take
+the more conservative loss update.</p>
+<p>For PPO, all of this happens <em>while</em> learning a value
+function, which opens more complexity, but this is the core logic for
+the parameter update.</p>
+<h4 data-number="1.2.3.1"
+id="ppogrpo-simplification-with-1-gradient-step-per-sample-no-clipping"><span
+class="header-section-number">1.2.3.1</span> PPO/GRPO simplification
+with 1 gradient step per sample (no clipping)</h4>
+<p>PPO (and GRPO) implementations can be handled much more elegantly if
+the hyperparameter “number of gradient steps per sample” is equal to 1.
+Many normal values for this are from 2-4 or higher. In the main PPO or
+GRPO equations, see <span class="citation"
+data-cites="eq:PPO_EQN">@eq:PPO_EQN</span>, the “reference” policy is
+the previous parameters – those used to generate the completions or
+actions. Thus, if only one gradient step is taken, <span
+class="math inline">\(\pi_\theta = \pi_{\theta_{old}}\)</span>, and the
+update rule reduces to the following (the notation <span
+class="math inline">\([]_\nabla\)</span> indicates a stop gradient):</p>
+<p><span class="math display">\[J(\theta) = \frac{1}{G}\sum_{i=1}^G
+\left(\frac{\pi_\theta(a_i|s)}{\left[\pi_{\theta}(a_i|s)\right]_\nabla}A_i
+- \beta D_{KL}(\pi_\theta||\pi_{ref})\right). \]</span>
+{#eq:ppo_1step}</p>
+<p>This leads to PPO or GRPO implementations where the second policy
+gradient and clipping logic can be omitted, making the optimizer far
+closer to standard policy gradient.</p>
+<h3 data-number="1.2.4" id="group-relative-policy-optimization-1"><span
+class="header-section-number">1.2.4</span> Group Relative Policy
+Optimization</h3>
+<p>The DeepSeekMath paper details some implementation details of GRPO
+that differ from PPO <span class="citation"
+data-cites="shao2024deepseekmath">[@shao2024deepseekmath]</span>,
+especially if comparing to a standard application of PPO from Deep RL
+rather than language models. For example, the KL penalty within the RLHF
+optimization (recall the KL penalty is also used when training reasoning
+models on verifiable rewards without a reward model) is applied directly
+in the loss update rather to the reward function. Where the standard KL
+penalty application for RLHF is applied as <span
+class="math inline">\(r=r_\theta + \beta D_{KL}\)</span>, the GRPO
+implementation is along the lines of:</p>
+<p><span class="math display">\[ L = L_{\text{policy gradient}} - \beta
+* D_{KL} \]</span></p>
+<p>Though, there are multiple ways to implement this. Traditionally, the
+KL distance is computed with respect to each token in the completion to
+a prompt <span class="math inline">\(s\)</span>. For reasoning training,
+multiple completions are sampled from one prompt, and there are multiple
+prompts in one batch, so the KL distance will have a shape of [B, L, N],
+where B is the batch size, L is the sequence length, and N is the number
+of completions per prompt.</p>
+<p>Putting it together, using the first loss accumulation, the
+psuedocode can be written as below.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># B: Batch Size, L: Sequence Length, G: Number of Generations</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute grouped-wise rewards # Shape: (B,)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mean_grouped_rewards <span class="op">=</span> rewards.view(<span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.num_generations).mean(dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>std_grouped_rewards <span class="op">=</span> rewards.view(<span class="op">-</span><span class="dv">1</span>, <span class="va">self</span>.num_generations).std(dim<span class="op">=</span><span class="dv">1</span>)    </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalize the rewards to compute the advantages</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>mean_grouped_rewards <span class="op">=</span> mean_grouped_rewards.repeat_interleave(<span class="va">self</span>.num_generations, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>std_grouped_rewards <span class="op">=</span> std_grouped_rewards.repeat_interleave(<span class="va">self</span>.num_generations, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape: (B*G,)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute advantages</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> (rewards <span class="op">-</span> mean_grouped_rewards) <span class="op">/</span> (std_grouped_rewards <span class="op">+</span> <span class="fl">1e-4</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> advantages.unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Shape: (B*G, 1)</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability ratio between new and old policies</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>ratio <span class="op">=</span> torch.exp(new_per_token_logps <span class="op">-</span> per_token_logps)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"># PPO clipping objective</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> <span class="va">self</span>.cliprange  <span class="co"># e.g. 0.2</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>pg_losses1 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> ratio  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>pg_losses2 <span class="op">=</span> <span class="op">-</span>advantages <span class="op">*</span> torch.clamp(ratio, <span class="fl">1.0</span> <span class="op">-</span> eps, <span class="fl">1.0</span> <span class="op">+</span> eps)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>pg_loss_max <span class="op">=</span> torch.<span class="bu">max</span>(pg_losses1, pg_losses2)  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># important to GRPO -- PPO applies this in reward traditionally</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine with KL penalty</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>per_token_loss <span class="op">=</span> pg_loss_max <span class="op">+</span> <span class="va">self</span>.beta <span class="op">*</span> per_token_kl  <span class="co"># Shape: (B*G, L)</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply completion mask and compute final loss</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> ((per_token_loss <span class="op">*</span> completion_mask).<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">/</span> completion_mask.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>)).mean()</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a> <span class="co"># Scalar</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute core metric for logging (KL, reward, etc. also logged)</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute clipping fraction</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    clip_frac <span class="op">=</span> ((pg_losses2 <span class="op">&gt;</span> pg_losses1).<span class="bu">float</span>() <span class="op">*</span> completion_mask).<span class="bu">sum</span>() <span class="op">/</span> completion_mask.<span class="bu">sum</span>()</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute approximate KL</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    approx_kl <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> ((new_per_token_logps <span class="op">-</span> per_token_logps)<span class="op">**</span><span class="dv">2</span>).mean()</span></code></pre></div>
+<p>For more details on how to interpret this code, see the PPO section
+above.</p>
+<h4 data-number="1.2.4.1" id="rloo-vs.-grpo"><span
+class="header-section-number">1.2.4.1</span> RLOO vs. GRPO</h4>
+<p>The advantage updates for RLOO follow very closely to GRPO,
+highlighting the conceptual similarity of the algorithm when taken
+separately from the PPO style clipping and KL penalty details.
+Specially, for RLOO, the advantage is computed relative to a baseline
+that is extremely similar to that of GRPO – the completion reward
+relative to the others for that same question. Concisely, the RLOO
+advantage estimate follows as (expanded from <a
+href="https://github.com/huggingface/trl/blob/bfe20756082488350091352d1cdc19c172e42cd8/trl/trainer/rloo_trainer.py#L433">TRL</a>’s
+implementation):</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rloo_k --&gt; number of completions per prompt </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># rlhf_reward --&gt; Initially a flat tensor of total rewards for all completions. Length B = N x k</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>rlhf_reward <span class="op">=</span> rlhf_reward.reshape(rloo_k, <span class="op">-</span><span class="dv">1</span>) <span class="co"># </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, Shape: (k, N), each column j contains the k rewards for prompt j.</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>baseline <span class="op">=</span> (rlhf_reward.<span class="bu">sum</span>(<span class="dv">0</span>) <span class="op">-</span> rlhf_reward) <span class="op">/</span> (rloo_k <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># baseline --&gt; Leave-one-out baseline rewards. Shape: (k, N)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  baseline[i, j] is the avg reward of samples i&#39; != i for prompt j.</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> rlhf_reward <span class="op">-</span> baseline</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># advantages --&gt; Same Shape: (k, N)</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>advantages <span class="op">=</span> advantages.flatten() <span class="co"># Same shape as original tensor</span></span></code></pre></div>
+<p>The rest of the implementation details for RLOO follow the other
+trade-offs of implementing policy-gradient.</p>
+<h2 data-number="1.3" id="auxiliary-topics"><span
+class="header-section-number">1.3</span> Auxiliary Topics</h2>
+<p>In order to master the application of policy-gradient algorithms,
+there are countless other considerations. Here we consider some, but not
+all of these discussions.</p>
+<h3 data-number="1.3.1" id="generalized-advantage-estimation-gae"><span
+class="header-section-number">1.3.1</span> Generalized Advantage
+Estimation (GAE)</h3>
+<p>Generalized Advantage Estimation (GAE) is an alternate method to
+compute the advantage for policy gradient algorithms <span
+class="citation"
+data-cites="schulman2015high">[@schulman2015high]</span> that better
+balances the bias-variance tradeoff. Traditional single-step advantage
+estimates often suffer from high variance, while using complete
+trajectories can introduce too much bias. GAE works by combining two
+ideas – multi-step prediction and weighted running average (or just one
+of these).</p>
+<p>Advantage estimates can take many forms, but we can define a <span
+class="math inline">\(k\)</span> step advantage estimator (similar to
+the TD residual at the beginning of the chapter) as follows:</p>
+<p><span class="math display">\[
+\hat{A}_t^{(n)} = \begin{cases}
+r_t + \gamma V(s_{t+1}) - V(s_t), &amp; n = 1 \\
+r_t + \gamma r_{t+1} + \gamma^2 V(s_{t+2}) - V(s_t), &amp; n = 2 \\
+\vdots \\
+r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \cdots - V(s_t), &amp; n =
+\infty
+\end{cases}
+\]</span> {#eq:K_STEP_ADV}</p>
+<p>Here a shorter <span class="math inline">\(k\)</span> will have lower
+variance but higher bias as we are attributing more learning power to
+each trajectory – it can overfit. GAE attempts to generalize this
+formulation into a weighted multi-step average instead of a specific
+<span class="math inline">\(k\)</span>. To start, we must define the
+temporal difference (TD) residual of predicted value.</p>
+<p><span class="math display">\[
+\delta_t^V = r_t + \gamma V(s_{t+1}) - V(s_t)
+\]</span> {#eq:TD_RESIDUAL}</p>
+<p>To utilize this, we introduce another variable <span
+class="math inline">\(\lambda\)</span> as the GAE mixing parameter. This
+folds into an exponential decay of future advantages we wish to
+estimate:</p>
+<p><span class="math display">\[
+\begin{array}{l}
+\hat{A}_t^{GAE(\gamma,\lambda)} = (1-\lambda)(\hat{A}_t^{(1)} +
+\lambda\hat{A}_t^{(2)} + \lambda^2\hat{A}_t^{(3)} + \cdots) \\
+= (1-\lambda)(\delta_t^V + \lambda(\delta_t^V + \gamma\delta_{t+1}^V) +
+\lambda^2(\delta_t^V + \gamma\delta_{t+1}^V + \gamma^2\delta_{t+2}^V) +
+\cdots) \\
+= (1-\lambda)(\delta_t^V(1 + \lambda + \lambda^2 + \cdots) +
+\gamma\delta_{t+1}^V(\lambda + \lambda^2 + \cdots) + \cdots) \\
+= (1-\lambda)(\delta_t^V\frac{1}{1-\lambda} +
+\gamma\delta_{t+1}^V\frac{\lambda}{1-\lambda} + \cdots) \\
+= \sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}^V
+\end{array}
+\]</span> {#eq:GAE_DFN}</p>
+<p>Intuitively, this can be used to average of multi-step estimates of
+Advantage in an elegant fashion.</p>
+<p><em>For further reading, see <span class="citation"
+data-cites="seita2017gae">[@seita2017gae]</span>.</em></p>
+<h3 data-number="1.3.2" id="double-regularization"><span
+class="header-section-number">1.3.2</span> Double Regularization</h3>
+<p>Many popular policy gradient algorithms from Deep Reinforcement
+Learning originated due to the need to control the learning process of
+the agent. In RLHF, as discussed extensively in Chapter 8 on
+Regularization and in Chapter 4 on Problem Formulation, there is a built
+in regularization term via the distance penalty relative to the original
+policy one is finetuning. In this view, a large part of the difference
+between algorithms like PPO (which have internal step-size
+regularization) and REINFORCE (which is simpler, and PPO under certain
+hyperparameters reduces to) is far less meaningful for finetuning
+language models than training agents from scratch.</p>
+<p>In PPO, the objective that handles capping the step-size of the
+update is known as the <a
+href="https://huggingface.co/blog/deep-rl-ppo#introducing-the-clipped-surrogate-objective">surrogate
+objective</a>. To monitor how much the PPO regularization is impacting
+updates in RLHF, one can look at the clip fraction variable in many
+popular implementations, which is the percentage of samples in the batch
+where the gradients are clipped by this regularizer in PPO. These
+gradients are <em>reduced</em> to a maximum value.</p>
+<h3 data-number="1.3.3" id="further-reading"><span
+class="header-section-number">1.3.3</span> Further Reading</h3>
+<p>As RLHF has cemented itself at the center of modern post-training,
+other policy-gradient RL algorithms and RL algorithms generally have
+been proposed to improve the training process, but they have not had a
+central role in governing best practices. Examples for further reading
+include:</p>
+<ul>
+<li><strong>Pairwise Proximal Policy Optimization (P3O)</strong> <span
+class="citation" data-cites="wu2023pairwise">[@wu2023pairwise]</span>
+uses pairwise data directly in a PPO-style policy update without
+learning an intermediate reward model.</li>
+<li>Other implementations of REINFORCE algorithms have been designed for
+language models, such as <strong>ReMax</strong> <span class="citation"
+data-cites="li2023remax">[@li2023remax]</span>, which implements a
+baseline normalization designed specifically to accommodate the sources
+of uncertainty from reward model inference.</li>
+<li>Some foundation models, such as Apple Intelligence Foundation Models
+<span class="citation"
+data-cites="gunter2024apple">[@gunter2024apple]</span> or Kimi k1.5
+reasoning model <span class="citation"
+data-cites="team2025kimi">[@team2025kimi]</span>, have used variants of
+<strong>Mirror Descent Policy Optimization (MDPO)</strong> <span
+class="citation" data-cites="tomar2020mirror">[@tomar2020mirror]</span>.
+Research is still developing further on the fundamentals here <span
+class="citation"
+data-cites="zhang2025improving">[@zhang2025improving]</span>, but Mirror
+Descent is an optimization method rather than directly a policy gradient
+algorithm. What is important here is that it is substituted in very
+similarly to existing RL infrastructure.</li>
+<li><strong>Decoupled Clip and Dynamic sAmpling Policy Optimization
+(DAPO)</strong> proposes 4 modifications to GRPO to better suit
+reasoning language models, where long traces are needed and new,
+underutilized tokens need to be increased in probability <span
+class="citation" data-cites="yu2025dapo">[@yu2025dapo]</span>. The
+changes are: 1, have two different clip hyperparameters, <span
+class="math inline">\(\epsilon_\text{low}\)</span> and <span
+class="math inline">\(\epsilon_\text{high}\)</span>, so clipping on the
+positive side of the logratio can take bigger steps for better
+exploration; 2, dynamic sampling, which removes all samples with reward
+= 0 or reward = 1 for all samples in the batch (no learning signal); 3,
+use the per token loss as discussed above in Implementation: GRPO; and
+4, a soft penalty on samples that are too long to avoid trying to learn
+from truncated answers.</li>
+</ul>
+</body>
+</html>

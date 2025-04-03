@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>03-setup</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#definitions-background"
+id="toc-definitions-background"><span
+class="toc-section-number">1</span> Definitions &amp; Background</a>
+<ul>
+<li><a href="#language-modeling-overview"
+id="toc-language-modeling-overview"><span
+class="toc-section-number">1.1</span> Language Modeling
+Overview</a></li>
+<li><a href="#ml-definitions" id="toc-ml-definitions"><span
+class="toc-section-number">1.2</span> ML Definitions</a></li>
+<li><a href="#nlp-definitions" id="toc-nlp-definitions"><span
+class="toc-section-number">1.3</span> NLP Definitions</a></li>
+<li><a href="#rl-definitions" id="toc-rl-definitions"><span
+class="toc-section-number">1.4</span> RL Definitions</a></li>
+<li><a href="#rlhf-only-definitions"
+id="toc-rlhf-only-definitions"><span
+class="toc-section-number">1.5</span> RLHF Only Definitions</a></li>
+<li><a href="#extended-glossary" id="toc-extended-glossary"><span
+class="toc-section-number">1.6</span> Extended Glossary</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="definitions-background"><span
+class="header-section-number">1</span> Definitions &amp; Background</h1>
+<p>This chapter includes all the definitions, symbols, and operations
+frequently used in the RLHF process and with a quick overview of
+language models (the common optimization target of this book).</p>
+<h2 data-number="1.1" id="language-modeling-overview"><span
+class="header-section-number">1.1</span> Language Modeling Overview</h2>
+<p>The majority of modern language models are trained to learn the joint
+probability distribution of sequences of tokens (words, subwords, or
+characters) in a autoregressive manner. Autoregression simply means that
+each next prediction depends on the previous entities in the sequence.
+Given a sequence of tokens <span class="math inline">\(x = (x_1, x_2,
+\ldots, x_T)\)</span>, the model factorizes the probability of the
+entire sequence into a product of conditional distributions:</p>
+<p><span class="math display">\[P_{\theta}(x) = \prod_{t=1}^{T}
+P_{\theta}(x_{t} \mid x_{1}, \ldots, x_{t-1}).\]</span> {#eq:llming}</p>
+<p>In order to fit a model that accurately predicts this, the goal is
+often to maximize the likelihood of the training data as predicted by
+the current model. To do so we can minimize a negative log-likelihood
+(NLL) loss:</p>
+<p><span
+class="math display">\[\mathcal{L}_{\text{LM}}(\theta)=-\,\mathbb{E}_{x
+\sim \mathcal{D}}\left[\sum_{t=1}^{T}\log P_{\theta}\left(x_t \mid
+x_{&lt;t}\right)\right]. \]</span> {#eq:nll}</p>
+<p>In practice, one uses a cross-entropy loss with respect to each
+next-token prediction, computed by comparing the true token in a
+sequence to what was predicted by the model.</p>
+<p>Implementing a language model can take many forms. Modern LMs,
+including ChatGPT, Claude, Gemini, etc., most often use
+<strong>decoder-only Transformers</strong> <span class="citation"
+data-cites="Vaswani2017AttentionIA">[@Vaswani2017AttentionIA]</span>.
+The core innovation of the Transformer was heavily utilizing the
+<strong>self-attention</strong> <span class="citation"
+data-cites="Bahdanau2014NeuralMT">[@Bahdanau2014NeuralMT]</span>
+mechanism to allow the model to directly attend to concepts in context
+and learn complex mappings. Throughout this book, particularly when
+covering reward models in Chapter 7, we will discuss adding new heads or
+modifying a language modeling (LM) head of the transformer. The LM head
+is a final linear projection layer that maps from the models internal
+embedding space to the tokenizer space (a.k.a. vocabulary). Different
+heads can be used to re-use the internals of the model and fine-tune it
+to output differently shaped quantities.</p>
+<h2 data-number="1.2" id="ml-definitions"><span
+class="header-section-number">1.2</span> ML Definitions</h2>
+<ul>
+<li><strong>Kullback-Leibler (KL) divergence (<span
+class="math inline">\(D_{KL}(P || Q)\)</span>)</strong>, also known as
+KL divergence, is a measure of the difference between two probability
+distributions. For discrete probability distributions <span
+class="math inline">\(P\)</span> and <span
+class="math inline">\(Q\)</span> defined on the same probability space
+<span class="math inline">\(\mathcal{X}\)</span>, the KL distance from
+<span class="math inline">\(Q\)</span> to <span
+class="math inline">\(P\)</span> is defined as:</li>
+</ul>
+<p><span class="math display">\[ D_{KL}(P || Q) = \sum_{x \in
+\mathcal{X}} P(x) \log \left(\frac{P(x)}{Q(x)}\right) \]</span>
+{#eq:def_kl}</p>
+<h2 data-number="1.3" id="nlp-definitions"><span
+class="header-section-number">1.3</span> NLP Definitions</h2>
+<ul>
+<li><p><strong>Prompt (<span class="math inline">\(x\)</span>)</strong>:
+The input text given to a language model to generate a response or
+completion.</p></li>
+<li><p><strong>Completion (<span
+class="math inline">\(y\)</span>)</strong>: The output text generated by
+a language model in response to a prompt. Often the completion is
+denoted as <span class="math inline">\(y|x\)</span>.</p></li>
+<li><p><strong>Chosen Completion (<span
+class="math inline">\(y_c\)</span>)</strong>: The completion that is
+selected or preferred over other alternatives, often denoted as <span
+class="math inline">\(y_{chosen}\)</span>.</p></li>
+<li><p><strong>Rejected Completion (<span
+class="math inline">\(y_r\)</span>)</strong>: The disfavored completion
+in a pairwise setting.</p></li>
+<li><p><strong>Preference Relation (<span
+class="math inline">\(\succ\)</span>)</strong>: A symbol indicating that
+one completion is preferred over another, e.g., <span
+class="math inline">\(y_{chosen} \succ y_{rejected}\)</span>.</p></li>
+<li><p><strong>Policy (<span
+class="math inline">\(\pi\)</span>)</strong>: A probability distribution
+over possible completions, parameterized by <span
+class="math inline">\(\theta\)</span>: <span
+class="math inline">\(\pi_\theta(y|x)\)</span>.</p></li>
+</ul>
+<h2 data-number="1.4" id="rl-definitions"><span
+class="header-section-number">1.4</span> RL Definitions</h2>
+<ul>
+<li><p><strong>Reward (<span class="math inline">\(r\)</span>)</strong>:
+A scalar value indicating the desirability of an action or state,
+typically denoted as <span class="math inline">\(r\)</span>.</p></li>
+<li><p><strong>Action (<span class="math inline">\(a\)</span>)</strong>:
+A decision or move made by an agent in an environment, often represented
+as <span class="math inline">\(a \in A\)</span>, where <span
+class="math inline">\(A\)</span> is the set of possible
+actions.</p></li>
+<li><p><strong>State (<span class="math inline">\(s\)</span>)</strong>:
+The current configuration or situation of the environment, usually
+denoted as <span class="math inline">\(s \in S\)</span>, where <span
+class="math inline">\(S\)</span> is the state space.</p></li>
+<li><p><strong>Trajectory (<span
+class="math inline">\(\tau\)</span>)</strong>: A trajectory τ is a
+sequence of states, actions, and rewards experienced by an agent: <span
+class="math inline">\(\tau = (s_0, a_0, r_0, s_1, a_1, r_1, ..., s_T,
+a_T, r_T)\)</span>.</p></li>
+<li><p><strong>Trajectory Distribution (<span
+class="math inline">\((\tau|\pi)\)</span>)</strong>: The probability of
+a trajectory under policy <span class="math inline">\(\pi\)</span> is
+<span class="math inline">\(P(\tau|\pi) = p(s_0)\prod_{t=0}^T
+\pi(a_t|s_t)p(s_{t+1}|s_t,a_t)\)</span>, where <span
+class="math inline">\(p(s_0)\)</span> is the initial state distribution
+and <span class="math inline">\(p(s_{t+1}|s_t,a_t)\)</span> is the
+transition probability.</p></li>
+<li><p><strong>Policy (<span
+class="math inline">\(\pi\)</span>)</strong>, also called the
+<strong>policy model</strong> in RLHF: In RL, a policy is a strategy or
+rule that the agent follows to decide which action to take in a given
+state: <span class="math inline">\(\pi(a|s)\)</span>.</p></li>
+<li><p><strong>Value Function (<span
+class="math inline">\(V\)</span>)</strong>: A function that estimates
+the expected cumulative reward from a given state: <span
+class="math inline">\(V(s) = \mathbb{E}[\sum_{t=0}^{\infty} \gamma^t r_t
+| s_0 = s]\)</span>.</p></li>
+<li><p><strong>Q-Function (<span
+class="math inline">\(Q\)</span>)</strong>: A function that estimates
+the expected cumulative reward from taking a specific action in a given
+state: <span class="math inline">\(Q(s,a) =
+\mathbb{E}[\sum_{t=0}^{\infty} \gamma^t r_t | s_0 = s, a_0 =
+a]\)</span>.</p></li>
+<li><p><strong>Advantage Function (<span
+class="math inline">\(A\)</span>)</strong>: The advantage function <span
+class="math inline">\(A(s,a)\)</span> quantifies the relative benefit of
+taking action <span class="math inline">\(a\)</span> in state <span
+class="math inline">\(s\)</span> compared to the average action. It’s
+defined as <span class="math inline">\(A(s,a) = Q(s,a) - V(s)\)</span>.
+Advantage functions (and value functions) can depend on a specific
+policy, <span class="math inline">\(A^\pi(s,a)\)</span>.</p></li>
+<li><p><strong>Policy-conditioned Values (<span
+class="math inline">\([]^{\pi(\cdot)}\)</span>)</strong>: Across RL
+derivations and implementations, a crucial component of the theory and
+practice is collecting data or values conditioned on a specific policy.
+Throughout this book we will switch between the simpler notation of
+value functions et al. (<span class="math inline">\(V,A,Q,G\)</span>)
+and their specific policy-conditioned values (<span
+class="math inline">\(V^\pi,A^\pi,Q^\pi\)</span>). Crucial is also in
+the expected value computation is sampling from data <span
+class="math inline">\(d\)</span>, that is conditioned on a specific
+policy, <span class="math inline">\(d_\pi\)</span>.</p></li>
+<li><p><strong>Expectation of Reward Optimization</strong>: The primary
+goal in RL, which involves maximizing the expected cumulative
+reward:</p>
+<p><span class="math display">\[\max_{\theta} \mathbb{E}_{s \sim
+\rho_\pi, a \sim \pi_\theta}[\sum_{t=0}^{\infty} \gamma^t
+r_t]\]</span></p>
+<p>where <span class="math inline">\(\rho_\pi\)</span> is the state
+distribution under policy <span class="math inline">\(\pi\)</span>, and
+<span class="math inline">\(\gamma\)</span> is the discount
+factor.</p></li>
+<li><p><strong>Finite Horizon Reward (<span
+class="math inline">\(J(\pi_\theta)\)</span>)</strong>: The expected
+finite-horizon discounted return of the policy <span
+class="math inline">\(\pi_\theta\)</span>, parameterized by <span
+class="math inline">\(\theta\)</span> is defined as: <span
+class="math inline">\(J(\pi_\theta) = \mathbb{E}_{\tau \sim \pi_\theta}
+\left[ \sum_{t=0}^T \gamma^t r_t \right]\)</span> where <span
+class="math inline">\(\tau \sim \pi_\theta\)</span> denotes trajectories
+sampled by following policy <span
+class="math inline">\(\pi_\theta\)</span> and <span
+class="math inline">\(T\)</span> is the finite horizon.</p></li>
+<li><p><strong>On-policy</strong>: In RLHF, particularly in the debate
+between RL and Direct Alignment Algorithms, the discussion of
+<strong>on-policy</strong> data is common. In the RL literature,
+on-policy means that the data is generated <em>exactly</em> by the
+current form of the agent, but in the general preference-tuning
+literature, on-policy is expanded to mean generations from that edition
+of model – e.g. a instruction tuned checkpoint before running any
+preference fine-tuning. In this context, off-policy could be data
+generated by any other language model being used in
+post-training.</p></li>
+</ul>
+<h2 data-number="1.5" id="rlhf-only-definitions"><span
+class="header-section-number">1.5</span> RLHF Only Definitions</h2>
+<ul>
+<li><strong>Reference Model (<span
+class="math inline">\(\pi_\text{ref}\)</span>)</strong>: This is a saved
+set of parameters used in RLHF where outputs of it are used to
+regularize the optimization.</li>
+</ul>
+<h2 data-number="1.6" id="extended-glossary"><span
+class="header-section-number">1.6</span> Extended Glossary</h2>
+<ul>
+<li><strong>Synthetic Data</strong>: This is any training data for an AI
+model that is the output from another AI system. This could be anything
+from text generated from a open-ended prompt of a model to a model
+re-writing existing content.</li>
+<li><strong>Distillation</strong>: Distillation is a general set of
+practices in training AI models where a model is trained on the outputs
+of a stronger model. This is a type of synthetic data known to make
+strong, smaller models. Most models make the rules around distillation
+clear through either the license, for open weight models, or the terms
+of service, for models accessible only via API. The term distillation is
+now overloaded with a specific technical definition from the ML
+literature.</li>
+<li><strong>(Teacher-student) Knowledge Distillation</strong>: Knowledge
+distillation from a specific teacher to student model is a specific type
+of distillation above and where the term originated. It is a specific
+deep learning method where a neural network loss is modified to learn
+from the log-probabilites of the teacher model over multiple potential
+tokens/logits, instead of learning directly from a chosen output <span
+class="citation"
+data-cites="hinton2015distilling">[@hinton2015distilling]</span>. An
+example of a modern series of models trained with Knowledge Distillation
+is Gemma 2 <span class="citation"
+data-cites="team2024gemma">[@team2024gemma]</span> or Gemma 3. For a
+language modeling setup, the next-token loss function can be modified as
+follows <span class="citation"
+data-cites="agarwal2024policy">[@agarwal2024policy]</span>, where the
+student model <span class="math inline">\(P_\theta\)</span> learns from
+the teacher distribution <span
+class="math inline">\(P_\phi\)</span>:</li>
+</ul>
+<p><span class="math display">\[\mathcal{L}_{\text{KD}}(\theta) =
+-\,\mathbb{E}_{x \sim \mathcal{D}}\left[\sum_{t=1}^{T} P_{\phi}(x_t \mid
+x_{&lt;t}) \log P_{\theta}(x_t \mid x_{&lt;t})\right]. \]</span></p>
+<ul>
+<li><strong>In-context Learning (ICL)</strong>: In-context here refers
+to any information within the context window of the language model.
+Usually, this is information added to the prompt. The simplest form of
+in-context learning is adding examples of a similar form before the
+prompt. Advanced versions can learn which information to include for a
+specific use-case.</li>
+<li><strong>Chain of Thought (CoT)</strong>: Chain of thought is a
+specific behavior of language models where they are steered towards a
+behavior that breaks down a problem in a step by step form. The original
+version of this was through the prompt “Let’s think step by step” <span
+class="citation" data-cites="wei2022chain">[@wei2022chain]</span>.</li>
+</ul>
+</body>
+</html>

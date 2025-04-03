@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10-rejection-sampling</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#rejection-sampling" id="toc-rejection-sampling"><span
+class="toc-section-number">1</span> Rejection Sampling</a>
+<ul>
+<li><a href="#training-process" id="toc-training-process"><span
+class="toc-section-number">1.1</span> Training Process</a>
+<ul>
+<li><a href="#generating-completions"
+id="toc-generating-completions"><span
+class="toc-section-number">1.1.1</span> Generating Completions</a></li>
+<li><a href="#selecting-top-n-completions"
+id="toc-selecting-top-n-completions"><span
+class="toc-section-number">1.1.2</span> Selecting Top-N
+Completions</a></li>
+<li><a href="#fine-tuning" id="toc-fine-tuning"><span
+class="toc-section-number">1.1.3</span> Fine-tuning</a></li>
+<li><a href="#details" id="toc-details"><span
+class="toc-section-number">1.1.4</span> Details</a></li>
+</ul></li>
+<li><a href="#related-best-of-n-sampling"
+id="toc-related-best-of-n-sampling"><span
+class="toc-section-number">1.2</span> Related: Best-of-N
+Sampling</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 data-number="1" id="rejection-sampling"><span
+class="header-section-number">1</span> Rejection Sampling</h1>
+<p>Rejection Sampling (RS) is a popular and simple baseline for
+performing preference fine-tuning. Rejection sampling operates by
+curating new candidate instructions, filtering them based on a trained
+reward model, and then fine-tuning the original model only on the top
+completions.</p>
+<p>The name originates from computational statistics <span
+class="citation"
+data-cites="gilks1992adaptive">[@gilks1992adaptive]</span>, where one
+wishes to sample from a complex distribution, but does not have a direct
+method to do so. To alleviate this, one samples from a simpler to model
+distribution and uses a heuristic to check if the sample is permissible.
+With language models, the target distribution is high-quality answers to
+instructions, the filter is a reward model, and the sampling
+distribution is the current model.</p>
+<p>Many prominent RLHF and preference fine-tuning papers have used
+rejection sampling as a baseline, but a canonical implementation and
+documentation does not exist</p>
+<p>WebGPT <span class="citation"
+data-cites="nakano2021webgpt">[@nakano2021webgpt]</span>, Anthropic’s
+Helpful and Harmless agent<span class="citation"
+data-cites="bai2022training">[@bai2022training]</span>, OpenAI’s popular
+paper on process reward models <span class="citation"
+data-cites="lightman2023let">[@lightman2023let]</span>, Llama 2 Chat
+models <span class="citation"
+data-cites="touvron2023llama">[@touvron2023llama]</span>, and other
+seminal works all use this baseline.</p>
+<h2 data-number="1.1" id="training-process"><span
+class="header-section-number">1.1</span> Training Process</h2>
+<p>A visual overview of the rejection sampling process is included below
+in <span class="citation"
+data-cites="fig:rs-overview">@fig:rs-overview</span>.</p>
+<figure id="fig:rs-overview">
+<img src="images/rejection-sampling.png"
+alt="Rejection sampling overview." />
+<figcaption aria-hidden="true">Rejection sampling overview.</figcaption>
+</figure>
+<h3 data-number="1.1.1" id="generating-completions"><span
+class="header-section-number">1.1.1</span> Generating Completions</h3>
+<p>Let’s define a set of <span class="math inline">\(M\)</span> prompts
+as a vector:</p>
+<p><span class="math display">\[X = [x_1, x_2, ..., x_M]\]</span></p>
+<p>These prompts can come from many sources, but most popularly they
+come from the instruction training set.</p>
+<p>For each prompt <span class="math inline">\(x_i\)</span>, we generate
+<span class="math inline">\(N\)</span> completions. We can represent
+this as a matrix:</p>
+<p><span class="math display">\[Y = \begin{bmatrix}
+y_{1,1} &amp; y_{1,2} &amp; \cdots &amp; y_{1,N} \\
+y_{2,1} &amp; y_{2,2} &amp; \cdots &amp; y_{2,N} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+y_{M,1} &amp; y_{M,2} &amp; \cdots &amp; y_{M,N}
+\end{bmatrix}\]</span></p>
+<p>where <span class="math inline">\(y_{i,j}\)</span> represents the
+<span class="math inline">\(j\)</span>-th completion for the <span
+class="math inline">\(i\)</span>-th prompt. Now, we pass all of these
+prompt-completion pairs through a reward model, to get a matrix of
+rewards. We’ll represent the rewards as a matrix R:</p>
+<p><span class="math display">\[R = \begin{bmatrix}
+r_{1,1} &amp; r_{1,2} &amp; \cdots &amp; r_{1,N} \\
+r_{2,1} &amp; r_{2,2} &amp; \cdots &amp; r_{2,N} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+r_{M,1} &amp; r_{M,2} &amp; \cdots &amp; r_{M,N}
+\end{bmatrix}\]</span></p>
+<p>Each reward <span class="math inline">\(r_{i,j}\)</span> is computed
+by passing the completion <span class="math inline">\(y_{i,j}\)</span>
+and its corresponding prompt <span class="math inline">\(x_i\)</span>
+through a reward model <span
+class="math inline">\(\mathcal{R}\)</span>:</p>
+<p><span class="math display">\[r_{i,j} =
+\mathcal{R}(y_{i,j}|x_i)\]</span></p>
+<h3 data-number="1.1.2" id="selecting-top-n-completions"><span
+class="header-section-number">1.1.2</span> Selecting Top-N
+Completions</h3>
+<p>There are multiple methods to select the top completions to train
+on.</p>
+<p>To formalize the process of selecting the best completions based on
+our reward matrix, we can define a selection function <span
+class="math inline">\(S\)</span> that operates on the reward matrix
+<span class="math inline">\(R\)</span>.</p>
+<h4 data-number="1.1.2.1" id="top-per-prompt"><span
+class="header-section-number">1.1.2.1</span> Top Per Prompt</h4>
+<p>The first potential selection function takes the max per prompt.</p>
+<p><span class="math display">\[S(R) = [\arg\max_{j} r_{1,j},
+\arg\max_{j} r_{2,j}, ..., \arg\max_{j} r_{M,j}]\]</span></p>
+<p>This function <span class="math inline">\(S\)</span> returns a vector
+of indices, where each index corresponds to the column with the maximum
+reward for each row in <span class="math inline">\(R\)</span>. We can
+then use these indices to select our chosen completions:</p>
+<p><span class="math display">\[Y_{chosen} = [y_{1,S(R)_1},
+y_{2,S(R)_2}, ..., y_{M,S(R)_M}]\]</span></p>
+<h4 data-number="1.1.2.2" id="top-overall-prompts"><span
+class="header-section-number">1.1.2.2</span> Top Overall Prompts</h4>
+<p>Alternatively, we can select the top K prompt-completion pairs from
+the entire set. First, let’s flatten our reward matrix R into a single
+vector:</p>
+<p><span class="math display">\[R_{flat} = [r_{1,1}, r_{1,2}, ...,
+r_{1,N}, r_{2,1}, r_{2,2}, ..., r_{2,N}, ..., r_{M,1}, r_{M,2}, ...,
+r_{M,N}]\]</span></p>
+<p>This <span class="math inline">\(R_{flat}\)</span> vector has length
+<span class="math inline">\(M \times N\)</span>, where M is the number
+of prompts and N is the number of completions per prompt.</p>
+<p>Now, we can define a selection function <span
+class="math inline">\(S_K\)</span> that selects the indices of the K
+highest values in <span class="math inline">\(R_{flat}\)</span>:</p>
+<p><span class="math display">\[S_K(R_{flat}) =
+\text{argsort}(R_{flat})[-K:]\]</span></p>
+<p>where <span class="math inline">\(\text{argsort}\)</span> returns the
+indices that would sort the array in ascending order, and we take the
+last K indices to get the K highest values.</p>
+<p>To get our selected completions, we need to map these flattened
+indices back to our original completion matrix Y. We simply index the
+<span class="math inline">\(R_{flat}\)</span> vector to get our
+completions.</p>
+<h4 data-number="1.1.2.3" id="selection-example"><span
+class="header-section-number">1.1.2.3</span> Selection Example</h4>
+<p>Consider the case where we have the following situation, with 5
+prompts and 4 completions. We will show two ways of selecting the
+completions based on reward.</p>
+<p><span class="math display">\[R = \begin{bmatrix}
+0.7 &amp; 0.3 &amp; 0.5 &amp; 0.2 \\
+0.4 &amp; 0.8 &amp; 0.6 &amp; 0.5 \\
+0.9 &amp; 0.3 &amp; 0.4 &amp; 0.7 \\
+0.2 &amp; 0.5 &amp; 0.8 &amp; 0.6 \\
+0.5 &amp; 0.4 &amp; 0.3 &amp; 0.6
+\end{bmatrix}\]</span></p>
+<p>First, <strong>per prompt</strong>. Intuitively, we can highlight the
+reward matrix as follows:</p>
+<p><span class="math display">\[R = \begin{bmatrix}
+\textbf{0.7} &amp; 0.3 &amp; 0.5 &amp; 0.2 \\
+0.4 &amp; \textbf{0.8} &amp; 0.6 &amp; 0.5 \\
+\textbf{0.9} &amp; 0.3 &amp; 0.4 &amp; 0.7 \\
+0.2 &amp; 0.5 &amp; \textbf{0.8} &amp; 0.6 \\
+0.5 &amp; 0.4 &amp; 0.3 &amp; \textbf{0.6}
+\end{bmatrix}\]</span></p>
+<p>Using the argmax method, we select the best completion for each
+prompt:</p>
+<p><span class="math display">\[S(R) = [\arg\max_{j} r_{i,j} \text{ for
+} i \in [1,4]]\]</span></p>
+<p><span class="math display">\[S(R) = [1, 2, 1, 3, 4]\]</span></p>
+<p>This means we would select:</p>
+<ul>
+<li>For prompt 1: completion 1 (reward 0.7)</li>
+<li>For prompt 2: completion 2 (reward 0.8)</li>
+<li>For prompt 3: completion 1 (reward 0.9)</li>
+<li>For prompt 4: completion 3 (reward 0.8)</li>
+<li>For prompt 5: completion 4 (reward 0.6)</li>
+</ul>
+<p>Now, <strong>best overall</strong>. Let’s highlight the top 5 overall
+completion pairs.</p>
+<p><span class="math display">\[R = \begin{bmatrix}
+\textbf{0.7} &amp; 0.3 &amp; 0.5 &amp; 0.2 \\
+0.4 &amp; \textbf{0.8} &amp; 0.6 &amp; 0.5 \\
+\textbf{0.9} &amp; 0.3 &amp; 0.4 &amp; \textbf{0.7} \\
+0.2 &amp; 0.5 &amp; \textbf{0.8} &amp; 0.6 \\
+0.5 &amp; 0.4 &amp; 0.3 &amp; 0.6
+\end{bmatrix}\]</span></p>
+<p>First, we flatten the reward matrix:</p>
+<p><span class="math display">\[R_{flat} = [0.7, 0.3, 0.5, 0.2, 0.4,
+0.8, 0.6, 0.5, 0.9, 0.3, 0.4, 0.7, 0.2, 0.5, 0.8, 0.6, 0.5, 0.4, 0.3,
+0.6]\]</span></p>
+<p>Now, we select the indices of the 5 highest values: <span
+class="math display">\[S_5(R_{flat}) = [8, 5, 14, 0, 19]\]</span></p>
+<p>Mapping these back to our original matrix:</p>
+<ul>
+<li>Index 8 → prompt 3, completion 1 (reward 0.9)</li>
+<li>Index 5 → prompt 2, completion 2 (reward 0.8)</li>
+<li>Index 14 → prompt 4, completion 3 (reward 0.8)</li>
+<li>Index 0 → prompt 1, completion 1 (reward 0.7)</li>
+<li>Index 19 → prompt 3, completion 4 (reward 0.7)</li>
+</ul>
+<h4 data-number="1.1.2.4" id="implementation-example"><span
+class="header-section-number">1.1.2.4</span> Implementation Example</h4>
+<p>Here is a code snippet showing how the selection methods could be
+implemented.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.randint(<span class="dv">10</span>, size<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>x<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>sorted_indices <span class="op">=</span> np.argsort(x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>x_sorted <span class="op">=</span> x[sorted_indices]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>x_sorted<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># first way to recover the original array</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>i_rev <span class="op">=</span> np.zeros(<span class="dv">10</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>i_rev[sorted_indices] <span class="op">=</span> np.arange(<span class="dv">10</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>np.allclose(x, x_sorted[i_rev])</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># second way to recover the original array</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>np.allclose(x, x_sorted[np.argsort(sorted_indices)])</span></code></pre></div>
+<h3 data-number="1.1.3" id="fine-tuning"><span
+class="header-section-number">1.1.3</span> Fine-tuning</h3>
+<p>With the selected completions, you then perform standard instruction
+fine-tuning on the current rendition of the model. More details can be
+found in the <a href="https://rlhfbook.com/c/instructions.html">chapter
+on instruction tuning</a>.</p>
+<h3 data-number="1.1.4" id="details"><span
+class="header-section-number">1.1.4</span> Details</h3>
+<p>Implementation details for rejection sampling are relatively sparse.
+The core hyperparameters for performing this training are very
+intuitive:</p>
+<ul>
+<li><strong>Sampling parameters</strong>: Rejection sampling is directly
+dependent on the completions received from the model. Common settings
+for RS include temperatures above zero, e.g. between 0.7 and 1.0, with
+other modifications to parameters such as top-p or top-k sampling.</li>
+<li><strong>Completions per prompt</strong>: Successful implementations
+of rejection sampling have included 10 to 30 or more completions for
+each prompt. Using too few completions will make training biased and or
+noisy.</li>
+<li><strong>Instruction tuning details</strong>: No clear training
+details for the instruction tuning during RS have been released. It is
+likely that they use slightly different settings than the initial
+instruction tuning phase of the model.</li>
+<li><strong>Heterogeneous model generations</strong>: Some
+implementations of rejection sampling include generations from multiple
+models rather than just the current model that is going to be trained.
+Best practices on how to do this are not established.</li>
+<li><strong>Reward model training</strong>: The reward model used will
+heavily impact the final result. For more resources on reward model
+training, see the <a
+href="https://rlhfbook.com/c/07-reward-models.html">relevant
+chapter</a>.</li>
+</ul>
+<h4 data-number="1.1.4.1" id="implementation-tricks"><span
+class="header-section-number">1.1.4.1</span> Implementation Tricks</h4>
+<ul>
+<li>When doing batch reward model inference, you can sort the tokenized
+completions by length so that the batches are of similar lengths. This
+eliminates the need to run inference on as many padding tokens and will
+improve throughput in exchange for minor implementation complexity.</li>
+</ul>
+<h2 data-number="1.2" id="related-best-of-n-sampling"><span
+class="header-section-number">1.2</span> Related: Best-of-N
+Sampling</h2>
+<p>Best-of-N (BoN) sampling is often included as a baseline relative to
+RLHF methods. It is important to remember that BoN <em>does not</em>
+modify the underlying model, but is a sampling technique. For this
+matter, comparisons for BoN sampling to online training methods, such as
+PPO, are still valid in some contexts. For example, you can still
+measure the KL distance when running BoN sampling relative to any other
+policy.</p>
+<p>Here, we will show that when using simple BoN sampling over one
+prompt, both selection criteria shown above are equivalent.</p>
+<p>Let R be a reward vector for our single prompt with N
+completions:</p>
+<p><span class="math display">\[R = [r_1, r_2, ..., r_N]\]</span></p>
+<p>Where <span class="math inline">\(r_j\)</span> represents the reward
+for the j-th completion.</p>
+<p>Using the argmax method, we select the best completion for the
+prompt: <span class="math display">\[S(R) = \arg\max_{j \in [1,N]}
+r_j\]</span></p>
+<p>Using the Top-K method is normally done with Top-1, reducing to the
+same method.</p>
+</body>
+</html>
