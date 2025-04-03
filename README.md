@@ -1,20 +1,50 @@
-# Pandoc book template
+# RLHF Book
+Built on [**Pandoc book template**](https://github.com/wikiti/pandoc-book-template).
 
-[![CircleCI](https://circleci.com/gh/wikiti/pandoc-book-template.svg?style=shield)](https://circleci.com/gh/wikiti/pandoc-book-template)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wikiti/pandoc-book-template/blob/master/LICENSE.md)
+[![Code License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wikiti/pandoc-book-template/blob/master/LICENSE.md)
+[![Content License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-lightgrey)](https://github.com/natolambert/rlhf-book/blob/main/LICENSE-Content.md)
 
-## Description
+This is a work-in-progress textbook covering the fundamentals of Reinforcement Learning from Human Feedback (RLHF).
+The code is licensed with the MIT license, but the content for the book found in `chapters/` is licensed under the [Creative Commons Non-Commercial Attribution License](https://creativecommons.org/licenses/by-nc/4.0/deed.en), CC BY-NC 4.0.
+This is meant for people with a basic ML and/or software background.
+
+### Citation
+To cite this book, please use the following format.
+```
+@book{rlhf2024,
+  author       = {Nathan Lambert},
+  title        = {Reinforcement Learning from Human Feedback},
+  year         = {2024},
+  publisher    = {Online},
+  url          = {https://rlhfbook.com},
+  % Chapters can be optionally included as shown below:
+  % chapters   = {Introduction, Background, Methods, Results, Discussion, Conclusion}
+}
+```
+----
+
+## Tooling
 
 This repository contains a simple template for building [Pandoc](http://pandoc.org/) documents;
 Pandoc is a suite of tools to compile markdown files into readable files (PDF, EPUB, HTML...).
 
 ## Usage
 
+TLDR. 
+Run `make` to create files. 
+Run `make files` to move files into place for figures, pdf linked, etc.
+
+### Known Conversion Issues
+
+With the nested structure used for the website the section links between chapters in the PDF are broken. 
+We are opting for this in favor of a better web experience, but best practice is to not put any links to `rlhfbook.com` within the markdown files. Non-html versions will not be well suited to them.
+
 ### Installing
 
 Please, check [this page](http://pandoc.org/installing.html) for more information. On ubuntu, it
 can be installed as the *pandoc* package:
 
+#### Linux
 ```sh
 sudo apt-get install pandoc
 ```
@@ -31,6 +61,13 @@ To export to PDF files, make sure to install the following packages:
 ```sh
 sudo apt-get install texlive-fonts-recommended texlive-xetex
 ```
+
+#### Mac
+```
+brew install pandoc
+brew install make
+```
+(See below for `pandoc-crossref`)
 
 ### Folder structure
 
@@ -160,7 +197,7 @@ For more information, check the [Second] section.
 ...
 ```
 
-Or, with al alternative name:
+Or, with an alternative name:
 
 ```md
 For more information, check [this](#second) section.
@@ -239,6 +276,11 @@ valid plugin and with its own syntax.
 Using [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref) is highly recommended, but
 there are other alternatives which use a similar syntax, like
 [pandoc-xnos](https://github.com/tomduck/pandoc-xnos).
+
+To install on Mac, run:
+```
+brew install pandoc-crossref
+```
 
 First, enable the filter on the *Makefile* by updating the `FILTER_ARGS` variable with your new
 filter(s):
@@ -355,7 +397,7 @@ custom styles, etc, and modify the Makefile file accordingly.
 
 Output files are generated using [pandoc templates](https://pandoc.org/MANUAL.html#templates). All
 templates are located under the `templates/` folder, and may be modified as you will. Some basic
-format templates are already included on this repository, ion case you need something to start
+format templates are already included on this repository, in case you need something to start
 with.
 
 ## References
