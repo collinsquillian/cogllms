@@ -1,0 +1,47 @@
+name: Convert Markdown to HTML
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'chapters/**'
+      - 'templates/**'
+      - '.github/workflows/pandoc.yml'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Install Pandoc
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
+        
+    - name: Create output directory
+      run: mkdir -p output
+      
+    - name: Convert Markdown to HTML
+      run: |
+        for file in chapters/*.md; do
+          filename=$(basename "$file" .md)
+          pandoc "$file" \
+            --from markdown \
+            --to html5 \
+            --standalone \
+            --template=templates/default.html5 \
+            --toc \
+            --number-sections \
+            -o "output/${filename}.html"
+        done
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add output/
+        git commit -m "Update HTML output" || echo "No changes to commit"
+        git push 
