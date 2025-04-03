@@ -1,21 +1,17 @@
 ---
-title: Reinforcement Learning from Human Feedback
-subtitle: A short introduction to RLHF and post-training focused on language models.
+title: Cognition: Reasoning Fast and Slow with LLMs
+subtitle: An introduction to reasoning based on program synthesis and state-of-the-art generators using LLMs in the light of cognitive theories on reasoning fast and slow. 
 biblio-title: Bibliography
 reference-section-title: Bibliography
-author: Nathan Lambert
+author: Jonas Witt
 rights: CC-BY-NC-SA-4.0
 lang: en-US
 mainlang: english
 otherlang: english
-tags: [rlhf, ebook, ai, ml]
-date: 28 March 2025
+tags: [ebook, ai, ml]
+date: 03 April 2025
 abstract: |
-  Reinforcement learning from human feedback (RLHF) has become an important technical and storytelling tool to deploy the latest machine learning systems.
-  In this book, we hope to give a gentle introduction to the core methods for people with some level of quantitative background.
-  The book starts with the origins of RLHF -- both in recent literature and in a convergence of disparate fields of science in economics, philosophy, and optimal control.
-  We then set the stage with definitions, problem formulation, data collection, and other common math used in the literature.
-  We detail the popular algorithms and future frontiers of RLHF.
+  ...
 # mainfont: DejaVu Sans # not available on Mac
 Filter preferences:
 - pandoc-crossref
