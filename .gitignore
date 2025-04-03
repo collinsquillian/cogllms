@@ -1,0 +1,12 @@
+# Build
+build/**/*.png
+build/docx/
+build/epub/
+build/pdf/
+build/html/
+
+# Misc
+*.log
+.DS_Store
+**/.DS_Store
+.vscode/% 
