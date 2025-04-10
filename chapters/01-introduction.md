@@ -1,6 +1,6 @@
 ---
 prev-chapter: "Home"
-prev-url: "https://rlhfbook.com/"
+prev-url: "https://collinsquillian.github.io/cogllms/"
 page-title: Introduction
 next-chapter: "Key Related Works"
 next-url: "02-related-works.html"

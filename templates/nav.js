@@ -56,6 +56,7 @@ class NavigationDropdown extends HTMLElement {
         <ol start="13">
           <li><a href="https://rlhfbook.com/c/13-arc.html">Applications to ARC</a></li>
           <li><a href="https://rlhfbook.com/c/16-evaluation.html">Evaluation</a></li>
+          <li><a href="https://collinsquillian.github.io/cogllms/c/17-lossless-compression.html">Test-time inferencing as lossless compression</a></li>
         </ol>
       </div>
 
