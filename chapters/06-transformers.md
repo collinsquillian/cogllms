@@ -33,6 +33,7 @@ Original transformer architecture introduced in 2016 by XYZ: self-attention. Whe
 
 A. Simplified (non-trainable) self-attention
 
+We calculate context embeddings $z_i$ for each input token $x_i$
 
 
 III. Putting it all together
