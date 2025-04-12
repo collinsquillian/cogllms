@@ -6,6 +6,21 @@ next-chapter: "Key Related Works"
 next-url: "02-related-works.html"
 ---
 
+This manuscript explores the intersection of human cognition and Large Language Models (LLMs), examining how these AI systems are reshaping our understanding of intelligence, learning, and cognitive processes.
+
+
+Ilya Sutskever's NeurIPS 2025 talk presented several key insights about deep learning and AI's future trajectory. He introduced the "Deep Learning Hypothesis," suggesting that a 10-layer neural network could theoretically match human perception capabilities within 0.1 seconds, given the brain's neural firing rates. He highlighted the power of autoregressive models in learning token distributions for diverse tasks. The talk traced AI's evolution through the pre-training era, marked by models like GPT-2 and GPT-3, and scaling laws. However, Sutskever predicted the end of pre-training due to compute growth outpacing available data. Looking ahead, he identified three key directions: agent-based systems, synthetic data generation, and inference-time compute optimization (like O1). The future, he suggested, lies in developing more agentic systems and enhancing reasoning capabilities, particularly for self-correction and hallucination detection.
+
+Ilya Sutskever's talk at Stanford - "Obersations on generalizability" with a link t o compression.
+
+
+
+
+
+
+
+
+
 # Example Formatting
 
 Early breakthrough experiments with RLHF were applied to deep reinforcement learning [@christiano2017deep], summarization [@stiennon2020learning], following instructions [@ouyang2022training], parsing web information for question answering [@nakano2021webgpt], and "alignment" [@bai2022training].

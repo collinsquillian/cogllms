@@ -29,13 +29,14 @@ class NavigationDropdown extends HTMLElement {
         <ol start="1">
           <li><a href="https://collinsquillian.github.io/cogllms/c/01-introduction.html">Introduction</a></li>
           <li><a href="https://rlhfbook.com/c/01-cognitive-science.html">Reasoning fast and slow</a></li>
+          <li><a href="https://collinsquillian.github.io/cogllms/c/02-search.html">Cognition is not search: Cognition in the age of LLMs</a></li>
         </ol>
       </div>
 
       <div class="section">
         <h3>Problem Setup & Context</h3>
         <ol start="4">
-          <li><a href="https://rlhfbook.com/c/04-program-synthesis.html">Program Synthesis</a></li>
+          <li><a href="https://rlhfbook.com/c/04-program-synthesis.html">Program Synthesis: Search through a language space</a></li>
           <li><a href="https://rlhfbook.com/c/05-deep-learning.html">2014-2024 Deep Learning</a></li>
           <li><a href="https://rlhfbook.com/c/06-transformers.html">Transformers 101</a></li>
         </ol>
