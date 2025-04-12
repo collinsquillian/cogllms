@@ -38,7 +38,7 @@ class NavigationDropdown extends HTMLElement {
         <ol start="4">
           <li><a href="https://rlhfbook.com/c/04-program-synthesis.html">Program Synthesis: Search through a language space</a></li>
           <li><a href="https://rlhfbook.com/c/05-deep-learning.html">2014-2024 Deep Learning</a></li>
-          <li><a href="https://rlhfbook.com/c/06-transformers.html">Transformers 101</a></li>
+          <li><a href="https://collinsquillian.github.io/cogllms/c/06-transformers.html">Transformers 101</a></li>
         </ol>
       </div>
 
