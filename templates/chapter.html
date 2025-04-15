@@ -56,6 +56,16 @@ $endfor$
 <script src="nav.js" defer></script>
 <script src="header-anchors.js" defer></script>
 
+<!-- Add Mermaid library -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        securityLevel: 'loose'
+    });
+</script>
+
 </head>
 <body>
 $for(include-before)$

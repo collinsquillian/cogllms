@@ -33,11 +33,15 @@ Original transformer architecture introduced in 2016 by XYZ: self-attention. Whe
 
 A. Simplified (non-trainable) self-attention
 
-We calculate context embeddings $z_i$ for each input token $x_i$
+We calculate context embeddings $z_i$ for each input token $x_i$. A set of weights for the Cartesian product of these two: weights $a_ii$.
+
+#ToDo: visualize weights and tokens in a diagram
+
 
 
 III. Putting it all together
 
+```mermaid
 graph TD
     A[Deep Learning Hypothesis] --> B[10-layer Neural Network]
     B --> C[Human-like Perception in 0.1s]
@@ -62,3 +66,4 @@ graph TD
     style G fill:#bbf,stroke:#333,stroke-width:2px
     style K fill:#bfb,stroke:#333,stroke-width:2px
     style O fill:#fbb,stroke:#333,stroke-width:2px
+```
