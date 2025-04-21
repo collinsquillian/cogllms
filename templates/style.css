@@ -599,11 +599,6 @@ td {
   transition: all 0.2s ease;
 }
 
-.quick-link:hover {
-  color: #2563eb;
-  transform: translateY(-1px);
-}
-
 .quick-link .icon {
   width: 18px;
   height: 18px;
