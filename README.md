@@ -6,7 +6,6 @@ Inspired by RLHF by Nathan Lambert and the based on the [**Pandoc book template*
 
 This is a work-in-progress seminar series that looks into reasoning, from a cognitive science and engineering perspective. We uncover cognitive theories of reasoning in humans and build an algorithmic toolbox centered on doing reasoning with LLMs. The later starts with transformer fundamentals and extends towards state-of-the-art post-training techniques.
 
-
 The code is licensed with the MIT license, but the content for the book found in `chapters/` is licensed under the [Creative Commons Non-Commercial Attribution License](https://creativecommons.org/licenses/by-nc/4.0/deed.en), CC BY-NC 4.0.
 This is meant for people with a basic ML and/or software background.
 
@@ -14,13 +13,11 @@ This is meant for people with a basic ML and/or software background.
 To cite this book, please use the following format.
 ```
 @book{rlhf2024,
-  author       = {Nathan Lambert},
-  title        = {Reinforcement Learning from Human Feedback},
-  year         = {2024},
+  author       = {Jonas Witt,
+  title        = {Reasoning Fast and Slow with LLMs},
+  year         = {2025},
   publisher    = {Online},
-  url          = {https://rlhfbook.com},
-  % Chapters can be optionally included as shown below:
-  % chapters   = {Introduction, Background, Methods, Results, Discussion, Conclusion}
+  url          = {https://collinsquillian.github.io/cogllms/}
 }
 ```
 ----
