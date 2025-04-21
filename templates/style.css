@@ -415,7 +415,7 @@ td {
 .dropdown-button:hover {
   background: #f9fafb;
   border-color: #d1d5db;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); */
 }
 
 .dropdown-button .chevron {
@@ -480,11 +480,6 @@ td {
   align-items: center;
   text-decoration: none;
   transition: all 0.2s ease;
-}
-
-.section h3:hover {
-  text-decoration: underline;
-  color: #2563eb;
 }
 
 .section h3::before {
