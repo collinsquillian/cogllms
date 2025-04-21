@@ -1,10 +1,12 @@
-# RLHF Book
-Built on [**Pandoc book template**](https://github.com/wikiti/pandoc-book-template).
+# Reasoning Fast and Slow with LLMs
+Inspired by RLHF by Nathan Lambert and the based on the [**Pandoc book template**](https://github.com/wikiti/pandoc-book-template).
 
 [![Code License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wikiti/pandoc-book-template/blob/master/LICENSE.md)
-[![Content License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-lightgrey)](https://github.com/natolambert/rlhf-book/blob/main/LICENSE-Content.md)
+[![Content License](https://img.shields.io/badge/license-CC--BY--NC--SA--4.0-lightgrey)](https://github.com/collinsquillian/cogllms/blob/main/LICENSE-Content.md)
 
-This is a work-in-progress textbook covering the fundamentals of Reinforcement Learning from Human Feedback (RLHF).
+This is a work-in-progress seminar series that looks into reasoning, from a cognitive science and engineering perspective. We uncover cognitive theories of reasoning in humans and build an algorithmic toolbox centered on doing reasoning with LLMs. The later starts with transformer fundamentals and extends towards state-of-the-art post-training techniques.
+
+
 The code is licensed with the MIT license, but the content for the book found in `chapters/` is licensed under the [Creative Commons Non-Commercial Attribution License](https://creativecommons.org/licenses/by-nc/4.0/deed.en), CC BY-NC 4.0.
 This is meant for people with a basic ML and/or software background.
 

@@ -435,7 +435,8 @@ td {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.25rem;
   padding: 1.25rem;
-  max-width: 1200px;
+  width: 100%;
+  max-width: none;
   text-align: left;
 }
 
@@ -447,6 +448,7 @@ td {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .section::before {
@@ -478,17 +480,10 @@ td {
   color: #111827;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .section h3::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: #2563eb;
-  border-radius: 50%;
-  opacity: 0.6;
+  display: none;
 }
 
 .section ol, .section ul {
