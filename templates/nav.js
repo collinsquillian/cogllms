@@ -16,13 +16,6 @@ class NavigationDropdown extends HTMLElement {
           
           <div class="dropdown-content${initialExpanded ? ' open' : ''}">
     <nav class="chapter-nav">
-      <div class="section">
-        <h3>Links</h3>
-        <ul>
-          <li><a href="https://collinsquillian.github.io/cogllms/">Home</a></li>
-          <li><a href="https://github.com/collinsquillian/cogllms">GitHub Repository</a></li>
-        </ul>
-      </div>
 
       <div class="section">
         <h3>Introductions</h3>
@@ -60,12 +53,7 @@ class NavigationDropdown extends HTMLElement {
           <li><a href="https://collinsquillian.github.io/cogllms/c/17-lossless-compression.html">Test-time inferencing as lossless compression</a></li>
         </ul>
       </div>
-
-      <div class="section">
-        <h3>Open Questions</h3>
-        <ul start="16">
-        </ul>
-      </div>
+      
     </nav>
   </div>
 </div>
