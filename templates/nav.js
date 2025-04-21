@@ -26,45 +26,45 @@ class NavigationDropdown extends HTMLElement {
 
       <div class="section">
         <h3>Introductions</h3>
-        <ol start="1">
+        <ul start="1">
           <li><a href="https://collinsquillian.github.io/cogllms/c/01-introduction.html">Introduction</a></li>
           <li><a href="https://rlhfbook.com/c/01-cognitive-science.html">Reasoning fast and slow</a></li>
           <li><a href="https://collinsquillian.github.io/cogllms/c/02-search.html">Cognition is not search: Cognition in the age of LLMs</a></li>
-        </ol>
+        </ul>
       </div>
 
       <div class="section">
         <h3>Problem Setup & Context</h3>
-        <ol start="4">
+        <ul start="4">
           <li><a href="https://rlhfbook.com/c/04-program-synthesis.html">Program Synthesis: Search through a language space</a></li>
           <li><a href="https://rlhfbook.com/c/05-deep-learning.html">2014-2024 Deep Learning</a></li>
           <li><a href="https://collinsquillian.github.io/cogllms/c/06-transformers.html">Transformers 101</a></li>
-        </ol>
+        </ul>
       </div>
 
       <div class="section">
         <h3>Training LLMs</h3>
-        <ol start="7">
+        <ul start="7">
           <li><a href="https://rlhfbook.com/c/07-overview.html">Overview</a></li>
           <li><a href="https://rlhfbook.com/c/08-finetuning.html">Finetuning</a></li>
           <li><a href="https://rlhfbook.com/c/09-inference-time-scaling.html">Inference Time Scaling</a></li>
           <li><a href="https://rlhfbook.com/c/10-RL.html">RL</a></li>
-        </ol>
+        </ul>
       </div>
 
       <div class="section">
         <h3>Advanced (WIP)</h3>
-        <ol start="13">
+        <ul start="13">
           <li><a href="https://rlhfbook.com/c/13-arc.html">Applications to ARC</a></li>
           <li><a href="https://rlhfbook.com/c/16-evaluation.html">Evaluation</a></li>
           <li><a href="https://collinsquillian.github.io/cogllms/c/17-lossless-compression.html">Test-time inferencing as lossless compression</a></li>
-        </ol>
+        </ul>
       </div>
 
       <div class="section">
         <h3>Open Questions</h3>
-        <ol start="16">
-        </ol>
+        <ul start="16">
+        </ul>
       </div>
     </nav>
   </div>
