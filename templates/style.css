@@ -413,9 +413,7 @@ td {
 }
 
 .dropdown-button:hover {
-  background: #f9fafb;
   border-color: #d1d5db;
-  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); */
 }
 
 .dropdown-button .chevron {
@@ -463,8 +461,6 @@ td {
 
 .section:hover {
   border-color: #d1d5db;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
 }
 
 .section:hover::before {
