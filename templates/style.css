@@ -521,11 +521,6 @@ td {
   margin-right: 0.5rem;
 }
 
-.section li:hover {
-  color: #1f2937;
-  transform: translateX(4px);
-}
-
 .section a {
   color: #2563eb;
   text-decoration: none;
@@ -597,6 +592,11 @@ td {
   font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.2s ease;
+}
+
+.quick-link:hover {
+  color: #2563eb;
+  transform: translateY(-1px);
 }
 
 .quick-link .icon {
